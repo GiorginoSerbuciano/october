@@ -1,11 +1,44 @@
-let vertex_list = [];
+let shapeClassifier;
+let canvas;
+let img;
+let buttons;
+let label;
 let drawing_array = [];
 let drawing = [];
 
 function setup(){
   createCanvas(windowWidth, windowHeight);
   background(255);
-  // console.log(">>RUNNING<<");
+  console.log("RUNNING...");
+
+  let options = {
+    inputs: [windowWidth, windowHeight, 4],
+    task: "imageClassification",
+    debug: "true"
+  };
+
+  shapeClassifier = ml5.neuralNetwork(options);
+
+  buttonsConfig();
+  
+}
+
+function buttonsConfig(){
+
+  buttons = {
+    "add": createButton('Add!'),
+    "label": createButton(label),
+    "train": createButton('Train!')
+  }
+  
+  buttons.add.position(50, 0);
+  buttons.train.position(0, 0);
+  buttons.label.position(94, 0);
+  
+  buttons.train.mousePressed();
+  buttons.add.mousePressed();
+  buttons.label.mousePressed();
+
 }
 
 // function windowResized() {
@@ -14,17 +47,24 @@ function setup(){
 
 function mousePressed() {
   // console.log("event: mousePressed()");
+
   if (keyIsDown(SHIFT) === false){
     drawing = [];
   }
 }
 
 function keyPressed() {
+
   if (key === "c"){
-    // console.log(">>ERASE<<");
     drawing = [];
     clear();
     // BUG: Does not clear latest drawing!
+    // FIXED: draw() -> mouseDragged()
+    // BREAKS: SHIFT key line drawing!!
+
+  } else if (key === "a"){
+    shapeClassifier.addData({ image: get(0, 0, 200, 200)})
+
   }
 }
 
@@ -34,8 +74,7 @@ function mouseReleased(){
 
 }
 
-function draw(){
-
+function mouseDragged(){
   noFill();
   if (mouseIsPressed){
     drawing.push([mouseX,mouseY]);
@@ -47,4 +86,9 @@ function draw(){
     }
   }
   endShape();
+}
+
+function draw(){
+
+ 
 }
