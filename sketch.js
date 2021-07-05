@@ -3,22 +3,35 @@ let drawing_array = [];
 let drawing = [];
 
 function setup(){
-  createCanvas(400,400);
+  createCanvas(windowWidth, windowHeight);
   background(255);
+  // console.log(">>RUNNING<<");
 }
 
+// function windowResized() {
+//   resizeCanvas(windowWidth, windowHeight);
+// }
 
-function mouseReleased(){
-  if (keyIsPressed == true){
-    if (keyIsDown(SHIFT)){
-    } else {
-      drawing_array.push(drawing);
-      drawing = [];
-    }
-  } else {
-    drawing_array.push(drawing);
+function mousePressed() {
+  // console.log("event: mousePressed()");
+  if (keyIsDown(SHIFT) === false){
     drawing = [];
   }
+}
+
+function keyPressed() {
+  if (key === "c"){
+    // console.log(">>ERASE<<");
+    drawing = [];
+    clear();
+    // BUG: Does not clear latest drawing!
+  }
+}
+
+function mouseReleased(){
+  // console.log("event: mouseReleased()");
+  drawing_array.push(drawing);
+
 }
 
 function draw(){
