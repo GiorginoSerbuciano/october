@@ -2,17 +2,26 @@ let shapeClassifier;
 let canvas;
 let img;
 let buttons;
-let label;
+
+let labels = [
+  "square",
+  "circle",
+  "triangle",
+]
+let label = labels[0];
 let drawing_array = [];
 let drawing = [];
+let i = 0;
 
 function setup(){
-  createCanvas(windowWidth, windowHeight);
+  // canvas = createCanvas(windowWidth, windowHeight);
+  canvas = createCanvas(500,500);
+
   background(255);
-  console.log("RUNNING...");
+  console.log("RUNNING..."); 
 
   let options = {
-    inputs: [windowWidth, windowHeight, 4],
+    inputs: [500,500, 4],
     task: "imageClassification",
     debug: "true"
   };
@@ -20,14 +29,16 @@ function setup(){
   shapeClassifier = ml5.neuralNetwork(options);
 
   buttonsConfig();
-  
+
+  console.log(label);
+
 }
 
 function buttonsConfig(){
 
   buttons = {
     "add": createButton('Add!'),
-    "label": createButton(label),
+    "label": createButton('Click me to change label!'),
     "train": createButton('Train!')
   }
   
@@ -35,10 +46,40 @@ function buttonsConfig(){
   buttons.train.position(0, 0);
   buttons.label.position(94, 0);
   
-  buttons.train.mousePressed();
-  buttons.add.mousePressed();
-  buttons.label.mousePressed();
+  buttons.train.mousePressed(startTraining);
+  buttons.add.mousePressed(addShape);
+  buttons.label.mousePressed(changeLabel);
 
+}
+
+function startTraining(){
+  shapeClassifier.normalizeData();
+  shapeClassifier.train({ epochs: 10 }, finishedTraining);
+}
+
+function finishedTraining(){
+  console.log(">>> TRAINING FINISHED! <<<")
+  // setTimeout(buttons.train = createButton("Train!"), 1000 )
+}
+
+function addShape() {
+  img = get();
+  shapeClassifier.addData({ image: img }, { label: label });
+  console.log(shapeClassifier.data);
+}
+
+function changeLabel() {
+  if (i < labels.length - 1){
+    // buttons.label = createButton(labels[i]);
+    i++;
+    label = labels[i];
+    console.log(label, i);
+  } else {
+    i = 0;
+    label = labels[i];
+    console.log(label, i);
+  }
+  
 }
 
 // function windowResized() {
@@ -47,7 +88,7 @@ function buttonsConfig(){
 
 function mousePressed() {
   // console.log("event: mousePressed()");
-
+  // x1 y1
   if (keyIsDown(SHIFT) === false){
     drawing = [];
   }
@@ -70,8 +111,10 @@ function keyPressed() {
 
 function mouseReleased(){
   // console.log("event: mouseReleased()");
+  // x2 y2
   drawing_array.push(drawing);
-
+  // drawing = [];
+  // 
 }
 
 function mouseDragged(){
@@ -90,5 +133,4 @@ function mouseDragged(){
 
 function draw(){
 
- 
 }
