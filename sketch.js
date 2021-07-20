@@ -1,17 +1,11 @@
-let shapeClassifier;
-let canvas;
-let buttons;
+// GLOBALS
+let shapeClassifier;  // ml5.neuralnetwork()
+let canvas;  // createCanvas()
+const labels = ["square","circle","triangle"]  
+let current_label = labels[0]; // defaults drawing label to square
+let drawing = [];  // stores the current drawing i.e. shape being drawn
 
-let labels = [
-  "square",
-  "circle",
-  "triangle",
-]
-let label_pos = 0
-let current_label = labels[label_pos];
-let drawing_array = [];
-let drawing = [];
-let i = 0;
+
 
 function setup(){
   // canvas = createCanvas(windowWidth, windowHeight);
@@ -27,64 +21,71 @@ function setup(){
   };
 
   shapeClassifier = ml5.neuralNetwork(options);
-
 }
 
 
-function finishedTraining(){
+function finishedTraining(){  // callback for shapeClassifier.train()
   console.log(">>> TRAINING FINISHED! <<<")
-  // setTimeout(buttons.train = createButton("Train!"), 1000 )
 }
 
 function mousePressed() {
-  // console.log("event: mousePressed()");
-  // x1 y1
-  if (keyIsDown(SHIFT) === false){
-    drawing = [];
+
+  if (keyIsDown(SHIFT) === false){  // allows the drawing of a straight line
+    drawing = [];  // if SHIFT is not being held, start a new drawing
   }
+}
+
+function changeLabel(){  // cycles through labels (see global labels)
+  let i = 0;
+  if (i < labels.length - 1){
+    i++;
+    current_label = labels[i];
+  } else {
+    i = 0;
+    current_label = labels[i];
+  };
 }
 
 function keyPressed() {
 
-  if (key === "c"){
+  if (key === "c"){  // clears the canvas
     drawing = [];
     clear();
     background(255);
-    // fix: SHIFT key line drawing!!
-  } else if (key === "a"){
+    // bug: Drawing straight lines only works when holding shift and dragging
+
+  } else if (key === "a"){  // adds the canvas i.e. the drawn shape to the NN's data
     img = canvas.get();
     shapeClassifier.addData({image: img}, {label: current_label});
-    console.log(shapeClassifier.data);
 
-  } else if (key === "l"){
-    label_pos = label_pos++;
+  } else if (key === "l"){  // goes to the next label
+    changeLabel();
     console.log(">>> LABEL:", current_label, "<<<");
 
-  } else if (key === "t"){
-    shapeClassifier.train({ epochs: 10 }, finishedTraining);
+  } else if (key === "t"){  // begins training
+    shapeClassifier.train({ epochs: 50 }, finishedTraining);
   }
 }
 
-function mouseReleased(){
-  // console.log("event: mouseReleased()");
-  // x2 y2
-  drawing_array.push(drawing);
-  // drawing = [];
-  // 
+function mouseReleased(){ 
+
 }
 
-function mouseDragged(){
-  noFill();
-  if (mouseIsPressed){
-    drawing.push([mouseX,mouseY]);
+function mouseDragged(){  // responsible for interaction with the canvas
+
+  if (mouseIsPressed){  // drawing controls
+    
+    drawing.push([mouseX,mouseY]);  // pushing every x/y coordinate of the pressed mouse
+
+    noFill();
     beginShape();
-    for (let i = 0; i < drawing.length; i++){
-      let x = drawing[i][0];
-      let y = drawing[i][1];
-      vertex(x,y);
+    for (let i = 0; i < drawing.length; i++){  // for every x/y coordinate recorded...
+      let x = drawing[i][0];  // ...define x...
+      let y = drawing[i][1];  // ...define y...
+      vertex(x,y);  // ...and draw a vertex at that position.
     }
   }
-  endShape();
+  endShape();  // closes the shape once the mouse is released.
 }
 
 function draw(){
