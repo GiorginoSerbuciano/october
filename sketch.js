@@ -1,7 +1,8 @@
 // GLOBALS
 let shapeClassifier;  // ml5.neuralnetwork()
 let canvas;  // createCanvas()
-const labels = ["square","circle","triangle"]  
+let labels = ["square","circle","triangle"];  
+let i = 0;
 let current_label = labels[0]; // defaults drawing label to square
 let drawing = [];  // stores the current drawing i.e. shape being drawn
 
@@ -36,7 +37,7 @@ function mousePressed() {
 }
 
 function changeLabel(){  // cycles through labels (see global labels)
-  let i = 0;
+  // let i = 0;
   if (i < labels.length - 1){
     i++;
     current_label = labels[i];
@@ -59,7 +60,7 @@ function keyPressed() {
     shapeClassifier.addData({image: img}, {label: current_label});
 
   } else if (key === "l"){  // goes to the next label
-    changeLabel();
+    changeLabel();  // does not work
     console.log(">>> LABEL:", current_label, "<<<");
 
   } else if (key === "t"){  // begins training
