@@ -99,8 +99,9 @@ function keyPressed() {
   if (key === "c"){
     drawing = [];
     clear();
+    background(255);
     // BUG: Does not clear latest drawing!
-    // FIXED: draw() -> mouseDragged()
+    // FIXED: draw() -> mouseDragged() + background back to white after clear
     // BREAKS: SHIFT key line drawing!!
 
   } else if (key === "a"){
