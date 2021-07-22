@@ -22,59 +22,11 @@ function setup(){
   };
 
   shapeClassifier = ml5.neuralNetwork(options);
-
-  buttonsConfig();
-
-  console.log(label);
-
 }
 
-function buttonsConfig(){
 
-  buttons = {
-    "add": createButton('Add!'),
-    "label": createButton('Click me to change label!'),
-    "train": createButton('Train!')
-  }
-  
-  buttons.add.position(50, 0);
-  buttons.train.position(0, 0);
-  buttons.label.position(94, 0);
-  
-  buttons.train.mousePressed(startTraining);
-  buttons.add.mousePressed(addShape);
-  buttons.label.mousePressed(changeLabel);
-
-}
-
-function startTraining(){
-  shapeClassifier.normalizeData();
-  shapeClassifier.train({ epochs: 10 }, finishedTraining);
-}
-
-function finishedTraining(){
+function finishedTraining(){  // callback for shapeClassifier.train()
   console.log(">>> TRAINING FINISHED! <<<")
-  // setTimeout(buttons.train = createButton("Train!"), 1000 )
-}
-
-function addShape() {
-  img = get();
-  shapeClassifier.addData({ image: img }, { label: label });
-  console.log(shapeClassifier.data);
-}
-
-function changeLabel() {
-  if (i < labels.length - 1){
-    // buttons.label = createButton(labels[i]);
-    i++;
-    label = labels[i];
-    console.log(label, i);
-  } else {
-    i = 0;
-    label = labels[i];
-    console.log(label, i);
-  }
-  
 }
 
 function mousePressed() {

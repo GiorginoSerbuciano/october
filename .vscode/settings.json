@@ -1,6 +1,3 @@
 {
-	"editor.fontFamily": "Liberation Mono",
-	"editor.fontSize": 16,
-	"editor.fontLigatures": true,
-	"editor.fontWeight": null
+	"editor.fontFamily": "Liberation Mono"
 }
