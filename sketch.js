@@ -8,12 +8,18 @@ let i = 0;  // MOVE INTO LOCAL
 let current_label = labels[0];  // defaults drawing label to square
 
 // DRAWINGS
-let drawing = [];  // stores the current drawing i.e. shape being drawn
-let drawing_line = [];  // SAME AS 'DRAWING' BUT FOR LINES
-let line_drawings = [];  // STORES ALL LINE DRAWINGS
-let drawings = [];  // STORES ALL FREE-HAND DRAWINGS
-let l1 = {};  // X1, Y1
-let l2 = {};  // X2, Y2
+let DRAW = {
+  FREE:[],
+  LINE:{
+    x1:undefined,
+    y1:undefined,
+    x2:undefined,
+    y2:undefined,
+  },
+  store_free:[],
+  store_lines:[]
+}
+
 
 function setup(){
   const canvas_size = {height:255, width:255};
@@ -52,12 +58,17 @@ function changeLabel(){  // cycles through labels (see global labels)
 function keyPressed() {
 
   if (key === "c"){  // clears the canvas
-    drawing = [];
-    line_drawings = [];
-    drawing_line = [];
-    drawings = [];
-    l1 = [];
-    l2 = [];
+    DRAW = {
+      FREE:[],
+      LINE:{
+        x1:undefined,
+        y1:undefined,
+        x2:undefined,
+        y2:undefined,
+      },
+      store_free:[],
+      store_lines:[]
+    }
     // SHOULD TURN ALL OF THIS INTO A SINGLE JSON
     clear();
     background(255);
@@ -81,10 +92,10 @@ function keyPressed() {
 function mousePressed() {
 
   if (keyIsDown(SHIFT) === false){  // allows freehand drawing
-    drawing = [];  // if SHIFT is not being held, start a new drawing
+    DRAW.FREE = [];  // if SHIFT is not being held, start a new drawing
   } else if (keyIsDown(SHIFT) === true) {  // allows the drawing of a straight line
-    l2 = {};  // CLEARS X2 AND Y2; ELSE WOULD CONNECT TO PREVIOUSLY DRAWN LINE
-    l1 = {x1:mouseX, y1:mouseY};
+    DRAW.LINE = {x1:mouseX, y1:mouseY, x2:undefined, y2:undefined};  // CLEARS X2 AND Y2; ELSE WOULD CONNECT TO PREVIOUSLY DRAWN LINE
+    // l1 = {x1:mouseX, y1:mouseY};
   }
 
 }
@@ -92,46 +103,53 @@ function mousePressed() {
 function mouseDragged(){
 
   if (keyIsDown(SHIFT) === false){  // FREEHAND DRAWING CONTROLS
-    drawing.push([mouseX,mouseY]); // pushing every x/y coordinate of the pressed mouse
+    DRAW.FREE.push([mouseX,mouseY]); // pushing every x/y coordinate of the pressed mouse
     noFill();
     beginShape();
-    for (let i = 0; i < drawing.length; i++){  // for every x/y coordinate recorded...
-      let x = drawing[i][0];  // ...define x...
-      let y = drawing[i][1];  // ...define y...
+    for (let i = 0; i < DRAW.FREE.length; i++){  // for every x/y coordinate recorded...
+      let x = DRAW.FREE[i][0];  // ...define x...
+      let y = DRAW.FREE[i][1];  // ...define y...
       vertex(x,y);  // ...and draw a vertex at that position.
     endShape(); 
     }
   } else if (keyIsDown(SHIFT) === true){  // LINE DRAWING CONTROLS
-    l2 = {x2:mouseX, y2:mouseY};
+    let l = DRAW.LINE;
+    DRAW.LINE = {x1:l.x1, y1:l.y1, x2:mouseX, y2:mouseY};
+    let x1 = DRAW.LINE.x1;
+    let y1 = DRAW.LINE.y1;
+    let x2 = DRAW.LINE.x2;
+    let y2 = DRAW.LINE.y2;
     background(255);  // ALLOWS A SINGLE 'PREVIEW' LINE
-    line(l1.x1, l1.y1, l2.x2, l2.y2);  
+    line(x1,y1,x2,y2);  
   }
 
 }
 
 function mouseReleased() {
 
-  drawing_line = {x1:l1.x1, y1:l1.y1, x2:l2.x2, y2:l2.y2};
-  drawings.push(drawing);
-  line_drawings.push(drawing_line);
+  // drawings_object.drawing_line = {x1:l1.x1, y1:l1.y1, x2:l2.x2, y2:l2.y2};
+  DRAW.store_free.push(DRAW.FREE);
+  DRAW.store_lines.push(DRAW.LINE);
 
 }
 
 function redrawLines(){  // RE-DRAWS ALL STORED LINES
 
-  for (let i = 0; i < line_drawings.length; i++){  
-    line(line_drawings[i].x1,line_drawings[i].y1,line_drawings[i].x2,line_drawings[i].y2);
+  let l = DRAW.store_lines;
+  for (let i = 0; i < l.length; i++){  
+    line(l[i].x1,l[i].y1,l[i].x2,l[i].y2);
   }
 
 }
 
 function redrawSketches(array){  // RE-DRAWS ALL STORED FREEHAND DRAWINGS
 
-  for (let i = 0; i < drawings.length; i++){  
+  let l = DRAW.store_free;
+  for (let i = 0; i < l.length; i++){  
     beginShape();
-    for (let j = 0; j < drawings[i].length; j++){
-      let x = drawings[i][j][0];
-      let y = drawings[i][j][1];
+    for (let j = 0; j < l[i].length; j++){
+      let x = l[i][j][0];
+      let y = l[i][j][1];
       vertex(x,y);
       }
     endShape(); 
