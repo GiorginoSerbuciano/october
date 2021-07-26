@@ -7,10 +7,10 @@ let labels = ["square","circle","triangle"];
 let i = 0;  // MOVE INTO LOCAL
 let current_label = labels[0];  // defaults drawing label to square
 
-// DRAWINGS
+// CONTAINER FOR DRAWINGS
 let DRAW = {
-  FREE:[],
-  LINE:{
+  FREE:[],  // vertices of current drawing
+  LINE:{  // coords of current line
     x1:undefined,
     y1:undefined,
     x2:undefined,
@@ -43,7 +43,7 @@ function finishedTraining(){  // callback for shapeClassifier.train()
   console.log(">>> TRAINING FINISHED! <<<")
 }
 
-function changeLabel(){  // cycles through labels (see global labels)
+function changeLabel(){ 
   // let i = 0;
   if (i < labels.length - 1){
     i++;
@@ -69,7 +69,6 @@ function keyPressed() {
       free_store:[],
       line_store:[]
     }
-    // SHOULD TURN ALL OF THIS INTO A SINGLE JSON
     clear();
     background(255);
 
@@ -88,7 +87,6 @@ function keyPressed() {
 }
 
 // DRAWING CONTROLS START HERE 
-
 function mousePressed() {
 
   if (keyIsDown(SHIFT) === false){  // allows freehand drawing
@@ -126,6 +124,8 @@ function mouseReleased() {
 
 }
 
+
+// FRAME UPDATES
 function drawLines(){  // RE-DRAWS ALL STORED LINES
 
   let l = DRAW.line_store;
