@@ -14,8 +14,10 @@ let drawing = [];
 let i = 0;
 
 function setup(){
-  // canvas = createCanvas(windowWidth, windowHeight);
-  canvas = createCanvas(500,500);
+  canvasWidth = 255;
+  canvasHeight = 255;
+  canvas = createCanvas(canvasWidth, canvasHeight);
+
 
   background(255);
   console.log("RUNNING..."); 
@@ -39,17 +41,63 @@ function buttonsConfig(){
   buttons = {
     "add": createButton('Add!'),
     "label": createButton('Click me to change label!'),
-    "train": createButton('Train!')
+    "train": createButton('Train!'),
+    "auto_train": createButton('Auto train!')
+    // Added Button to start automatic training 
   }
   
-  buttons.add.position(50, 0);
-  buttons.train.position(0, 0);
-  buttons.label.position(94, 0);
+  buttons.add.position(50, 270);
+  buttons.train.position(0, 270);
+  buttons.label.position(94, 270);
+  buttons.auto_train.position(0, 290);
+  //Moved all the buttons below the canvas
   
   buttons.train.mousePressed(startTraining);
   buttons.add.mousePressed(addShape);
   buttons.label.mousePressed(changeLabel);
+  buttons.auto_train.mousePressed(createDataSet);
 
+}
+
+//function to create the training data for the NN
+function createDataSet() {
+    //create data to recognize shapes 
+    for ( shape = 0; shape < 3; shape++){
+      r = random (10, 100);
+      x = random(r, canvasWidth - r);
+      y = random(r, canvasHeight - r);
+      translate(x, y);
+      if (shape == 0) {    //create data to recognize squares
+        for ( i = 0; i < 100; i++) {
+          clearCanvas();
+          rectMode(CENTER);
+          rotate(random(-0.1, 0.1));
+          square(0, 0, r*2);
+          label = labels[0];
+          addShape();
+      }
+      console.log(label);
+    } else if (shape == 1) {       //create data to recognize circles
+        for ( i = 0; i < 100; i++) {
+          clearCanvas();
+          circle(x, y, r*2);
+          label = labels[1];
+          addShape();
+        }
+        console.log(label);
+      } else if (shape == 2) {     //create data to recognize triangles
+          for ( i = 0; i < 100; i++) {
+           clearCanvas();
+           rotate(random(-0.1, 0.1));
+           triangle(0, -r, r, r, -r, r);
+           label = labels[2];
+           addShape();
+      }
+      console.log(label);
+    }
+  //run the training?
+  //startTraining();
+  }
 }
 
 function startTraining(){
@@ -94,18 +142,22 @@ function mousePressed() {
   }
 }
 
+function clearCanvas() {
+  drawing = [];
+  clear();
+  background(255);
+}
+
 function keyPressed() {
 
   if (key === "c"){
-    drawing = [];
-    clear();
-    background(255);
+    clearCanvas();
     // BUG: Does not clear latest drawing!
     // FIXED: draw() -> mouseDragged() + background back to white after clear
     // BREAKS: SHIFT key line drawing!!
 
   } else if (key === "a"){
-    shapeClassifier.addData({ image: get(0, 0, 200, 200)})
+    shapeClassifier.addData({ image: get(0, 0, 255, 255)})
 
   }
 }
