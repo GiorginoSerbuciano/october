@@ -2,13 +2,7 @@ let shapeClassifier;
 let canvas;
 let img;
 let buttons;
-
-let labels = [
-  "square",
-  "circle",
-  "triangle",
-]
-let label = labels[0];
+// SEE INDEX.HTML FOR LABELS
 let drawing_array = [];
 let drawing = [];
 let i = 0;
@@ -29,9 +23,6 @@ function setup(){
   shapeClassifier = ml5.neuralNetwork(options);
 
   buttonsConfig();
-
-  console.log(label);
-
 }
 
 function buttonsConfig(){
@@ -66,20 +57,6 @@ function addShape() {
   img = get();
   shapeClassifier.addData({ image: img }, { label: label });
   console.log(shapeClassifier.data);
-}
-
-function changeLabel() {
-  if (i < labels.length - 1){
-    // buttons.label = createButton(labels[i]);
-    i++;
-    label = labels[i];
-    console.log(label, i);
-  } else {
-    i = 0;
-    label = labels[i];
-    console.log(label, i);
-  }
-  
 }
 
 // function windowResized() {
