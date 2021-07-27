@@ -14,9 +14,9 @@ let drawing = [];
 let i = 0;
 
 function setup(){
-  canvasWidth = 255;
-  canvasHeight = 255;
-  canvas = createCanvas(canvasWidth, canvasHeight);
+  canvas_width = 255;
+  canvas_height = 255;
+  canvas = createCanvas(canvas_width, canvas_height);
 
 
   background(255);
