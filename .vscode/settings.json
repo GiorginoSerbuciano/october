@@ -1,6 +1,5 @@
 {
 	"editor.fontFamily": "Liberation Mono",
-	"editor.fontSize": 16,
-	"editor.fontLigatures": true,
-	"editor.fontWeight": null
+	"editor.codeLensFontSize": 20,
+	"editor.fontLigatures": true
 }
