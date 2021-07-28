@@ -158,7 +158,7 @@ function keyPressed() {
     // BREAKS: SHIFT key line drawing!!
 
   } else if (key === "a"){
-    shapeClassifier.addData({ image: get(0, 0, 255, 255)})
+    shapeClassifier.addData({ image: get(0, 0, canvas_width,  canvas_height)})
 
   }
 }
