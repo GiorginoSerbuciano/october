@@ -23,7 +23,7 @@ function setup(){
   console.log("RUNNING..."); 
 
   let options = {
-    inputs: [255, 255,  4],
+    inputs: [canvas_width, canvas_height,  4],
     task: "imageClassification",
     debug: "true"
   };
