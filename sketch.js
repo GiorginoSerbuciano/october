@@ -23,7 +23,7 @@ function setup(){
   console.log("RUNNING..."); 
 
   let options = {
-    inputs: [500,500, 4],
+    inputs: [255, 255,  4],
     task: "imageClassification",
     debug: "true"
   };
@@ -62,10 +62,11 @@ function buttonsConfig(){
 //function to create the training data for the NN
 function createDataSet() {
     //create data to recognize shapes 
+    //make a "set" varibale for how many of each shape are created
     for ( shape = 0; shape < 3; shape++){
-      r = random (10, 100);
-      x = random(r, canvasWidth - r);
-      y = random(r, canvasHeight - r);
+      r = random (10, canvas_height/3);
+      x = random(r, canvas_width - r);
+      y = random(r, canvas_weight - r);
       translate(x, y);
       if (shape == 0) {    //create data to recognize squares
         for ( i = 0; i < 100; i++) {
