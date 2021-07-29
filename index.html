@@ -8,5 +8,23 @@
   <body>
     <main>
     </main>
+
+    <script type="text/javascript">
+      function label_change(){
+        let label = form_labels.options[form_labels.selectedIndex].text;
+        console.log("LABEL:", label);
+        }
+      </script>
+    
+      <select id = "labels" onchange="label_change();">
+        <option value = "square">square</option>
+        <option value = "circle">circle</option>
+        <option value = "triangle">triangle</option>
+      </select>
+    
+      <script type="text/javascript">
+        let form_labels = document.getElementById("labels"); 
+      </script>
+
   </body>
 </html>
