@@ -51,7 +51,7 @@ function buttonsConfig(){
     // Added Button to start automatic training 
   }
   
-  buttons.add.position(0 canvasSize.height);
+  buttons.add.position(0, canvasSize.height);
   buttons.train.position(50, canvasSize.height);
   buttons.autoTrain.position(100, canvasSize.height);
   buttons.clear.position(150, canvasSize.height);
