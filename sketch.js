@@ -38,9 +38,6 @@ function setup(){
   shapeClassifier = ml5.neuralNetwork(options);
 
   buttonsConfig();
-
-  console.log(label);
-
 }
 
 function buttonsConfig(){
@@ -113,17 +110,6 @@ function finishedTraining(){  // callback for shapeClassifier.train()
   console.log(">>> TRAINING FINISHED! <<<")
 }
 
-function changeLabel(){ 
-  // let i = 0;
-  if (i < labels.length - 1){
-    i++;
-    current_label = labels[i];
-  } else {
-    i = 0;
-    current_label = labels[i];
-  }
-
-}
 
 function clearCanvas() {
   drawing = [];
