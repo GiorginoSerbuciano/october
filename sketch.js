@@ -3,9 +3,9 @@ let shapeClassifier;  // ml5.neuralnetwork()
 let canvas;  // createCanvas()
 
 // LABELS AND CYCLING
-let labels = ["square","circle","triangle"];  
-let i = 0;  // MOVE INTO LOCAL
-let currentLabel = labels[0];  // defaults drawing label to square
+let trainingLabels = ["square","circle","triangle"];  
+let currentTrainingLabel = trainingLabels[0];  // defaults drawing label to square
+// let userLabel = labelChange();  SEE INDEX.HTML -> Scope problem
 
 // CONTAINER FOR DRAWINGS
 let DRAW = {
@@ -17,10 +17,14 @@ let DRAW = {
     y2:undefined,
   },
   freeStore:[],
-  lineStore:[]
+  lineStore:[],
 }
 
-const canvasSize = {height:255, width:255, color:255};
+let canvasSize = {
+  height:255, 
+  width:255, 
+  color:255,
+}
 
 function setup(){
   
@@ -28,7 +32,7 @@ function setup(){
 
   background(canvasSize.color);
   console.log("RUNNING..."); 
-  console.log(">>> LABEL:", currentLabel, "<<<");
+
 
   let options = {
     inputs: [canvasSize.width, canvasSize.height,  4],
@@ -51,10 +55,11 @@ function buttonsConfig(){
     // Added Button to start automatic training 
   }
   
-  buttons.add.position(0, canvasSize.height);
-  buttons.train.position(50, canvasSize.height);
-  buttons.autoTrain.position(100, canvasSize.height);
-  buttons.clear.position(150, canvasSize.height);
+  let y = canvasSize.height + 25;
+  buttons.add.position(100, y);
+  buttons.train.position(150, y);
+  buttons.autoTrain.position(200, y);
+  buttons.clear.position(300, y);
   //Moved all the buttons below the canvas
   
   buttons.train.mousePressed(startTraining);
@@ -68,35 +73,35 @@ function buttonsConfig(){
 function createDataSet() {
     //create data to recognize shapes 
     //make a "set" varibale for how many of each shape are created
-    for ( shape = 0; shape < 3; shape++){
+    for (shape = 0; shape < 3; shape++){
       r = random (10, canvasSize.height/3);
       x = random(r, canvasSize.width - r);
       y = random(r, canvasSize.height - r);
       translate(x, y);
       if (shape == 0) {    //create data to recognize squares
-        for ( i = 0; i < 100; i++) {
+        for (i = 0; i < 100; i++) {
           clearCanvas();
           rectMode(CENTER);
           rotate(random(-0.1, 0.1));
           square(0, 0, r*2);
-          label = labels[0];
+          label = trainingLabels[0];
           addShape();
       }
       console.log(label);
     } else if (shape == 1) {       //create data to recognize circles
-        for ( i = 0; i < 100; i++) {
+        for (i = 0; i < 100; i++) {
           clearCanvas();
           circle(x, y, r*2);
-          label = labels[1];
+          label = trainingLabels[1];
           addShape();
         }
         console.log(label);
       } else if (shape == 2) {     //create data to recognize triangles
-          for ( i = 0; i < 100; i++) {
+          for (i = 0; i < 100; i++) {
            clearCanvas();
            rotate(random(-0.1, 0.1));
            triangle(0, -r, r, r, -r, r);
-           label = labels[2];
+           label = trainingLabels[2];
            addShape();
       }
       console.log(label);
@@ -108,7 +113,7 @@ function createDataSet() {
 
 function addShape(){
   img = canvas.get();
-  shapeClassifier.addData({image: img}, {label: currentLabel});
+  shapeClassifier.addData({image: img}, {label: userLabel});
   console.log(">>> SHAPE",label,"ADDED! <<<") 
 }
 
@@ -181,7 +186,7 @@ function mouseReleased() {
 function drawLines(){  // RE-DRAWS ALL STORED LINES
 
   let l = DRAW.lineStore;
-  for (let i = 0; i < l.length; i++){  
+  for (i = 0; i < l.length; i++){  
     line(l[i].x1,l[i].y1,l[i].x2,l[i].y2);
   }
 
@@ -190,7 +195,7 @@ function drawLines(){  // RE-DRAWS ALL STORED LINES
 function drawSketches(array){  // RE-DRAWS ALL STORED FREEHAND DRAWINGS
 
   beginShape();
-  for (let i = 0; i < array.length; i++){ 
+  for (i = 0; i < array.length; i++){ 
     let x = array[i][0];
     let y = array[i][1];
     vertex(x,y);
@@ -202,7 +207,7 @@ function drawSketches(array){  // RE-DRAWS ALL STORED FREEHAND DRAWINGS
 function draw() {
   
   drawLines();
-  for (let i = 0; i < DRAW.freeStore.length; i++){
+  for (i = 0; i < DRAW.freeStore.length; i++){
     drawSketches(DRAW.freeStore[i]);
   }
   
