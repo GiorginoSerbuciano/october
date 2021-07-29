@@ -1,25 +1,5 @@
-// GLOBALS
 let shapeClassifier;  // ml5.neuralnetwork()
 let canvas;  // createCanvas()
-
-// LABELS AND CYCLING
-let trainingLabels = ["square","circle","triangle"];  
-let currentTrainingLabel = trainingLabels[0];  // defaults drawing label to square
-// let userLabel = labelChange();  SEE INDEX.HTML -> Scope problem
-
-// CONTAINER FOR DRAWINGS
-let DRAW = {
-  FREE:[],  // vertices of current drawing
-  LINE:{  // coords of current line
-    x1:undefined,
-    y1:undefined,
-    x2:undefined,
-    y2:undefined,
-  },
-  freeStore:[],
-  lineStore:[],
-}
-
 let canvasSize = {
   height:255, 
   width:255, 
@@ -45,30 +25,30 @@ function setup(){
   buttonsConfig();
 }
 
+let userLabel = labelChange();
 function buttonsConfig(){
 
   buttons = {
-    "add": createButton('Add!'),
     "train": createButton('Train!'),
-    "autoTrain": createButton('Auto train!'),
+    "generate": createButton('Generate!'),
     "clear": createButton('Clear!'),
     // Added Button to start automatic training 
   }
   
   let y = canvasSize.height + 25;
-  buttons.add.position(100, y);
   buttons.train.position(150, y);
-  buttons.autoTrain.position(200, y);
+  buttons.generate.position(200, y);
   buttons.clear.position(300, y);
   //Moved all the buttons below the canvas
   
   buttons.train.mousePressed(startTraining);
-  buttons.add.mousePressed(addShape);
-  buttons.autoTrain.mousePressed(createDataSet);
+  buttons.generate.mousePressed(createDataSet);
   buttons.clear.mousePressed(clearCanvas);
 
 }
 
+
+let trainingLabels = ["square","circle","triangle"];  
 //function to create the training data for the NN
 function createDataSet() {
     //create data to recognize shapes 
@@ -84,36 +64,31 @@ function createDataSet() {
           rectMode(CENTER);
           rotate(random(-0.1, 0.1));
           square(0, 0, r*2);
-          label = trainingLabels[0];
-          addShape();
+          addShape(trainingLabels[0]);
       }
-      console.log(label);
     } else if (shape == 1) {       //create data to recognize circles
         for (i = 0; i < 100; i++) {
           clearCanvas();
           circle(x, y, r*2);
-          label = trainingLabels[1];
-          addShape();
+          addShape(trainingLabels[1]);
         }
-        console.log(label);
       } else if (shape == 2) {     //create data to recognize triangles
           for (i = 0; i < 100; i++) {
            clearCanvas();
            rotate(random(-0.1, 0.1));
            triangle(0, -r, r, r, -r, r);
-           label = trainingLabels[2];
-           addShape();
+           addShape(trainingLabels[2]);
       }
-      console.log(label);
     }
   //run the training?
   //startTraining();
   }
 }
 
-function addShape(){
+
+function addShape(label){
   img = canvas.get();
-  shapeClassifier.addData({image: img}, {label: userLabel});
+  shapeClassifier.addData({image: img}, {label: label});
   console.log(">>> SHAPE",label,"ADDED! <<<") 
 }
 
@@ -143,6 +118,18 @@ function finishedTraining(){  // callback for shapeClassifier.train()
   console.log(">>> TRAINING FINISHED! <<<")
 }
 
+
+let DRAW = {
+  FREE:[],  // vertices of current drawing
+  LINE:{  // coords of current line
+    x1:undefined,
+    y1:undefined,
+    x2:undefined,
+    y2:undefined,
+  },
+  freeStore:[],
+  lineStore:[],
+}
 // DRAWING CONTROLS START HERE 
 function mousePressed() {
 

@@ -5,15 +5,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.js"></script>
     <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
-    <script type="text/javascript">
-      function labelChange(){  // BUG: #24 Page freezes when changing label with an empty canvas
-        let label = formLabels.options[formLabels.selectedIndex].text;
-        console.log(">>> LABEL:", label, "<<<");
-        return label;
-      }  
-    </script>
-    <script src="sketch.js"></script>
-
+  
   </head>
   
 
@@ -27,10 +19,17 @@
       <option value = "circle">circle</option>
       <option value = "triangle">triangle</option>
     </select>
-  
+
     <script type="text/javascript">
       let formLabels = document.getElementById("dropdownLabels"); 
+      function labelChange(){  // BUG: #24 Page freezes when changing label with an empty canvas
+        let label = formLabels.options[formLabels.selectedIndex].text;
+        console.log(">>> LABEL:", label, "<<<");
+        return label;
+      }  
     </script>
+  
+    <script src="sketch.js"></script>
 
   </body>
 
