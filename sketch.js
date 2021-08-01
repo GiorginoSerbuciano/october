@@ -19,7 +19,6 @@ function setup(){
   };
 
   shapeClassifier = ml5.neuralNetwork(options);
-
   buttonsConfig();
 }
 
@@ -43,37 +42,40 @@ let trainingLabels = ["square","circle","triangle"];
 //function to create the training data for the NN
 function createDataSet() {
     //create data to recognize shapes 
-    //make a "set" varibale for how many of each shape are created
     let setSize = 10;
-    for ( shape = 0; shape < 3; shape++){
+    for (shape = 0; shape < 3; shape++){
       r = random (10, canvasSize.height/3);
       x = random(r, canvasSize.width - r);
       y = random(r, canvasSize.height - r);
       translate(x, y);
       if (shape == 0) {    //create data to recognize squares
-        for ( i = 0; i < setSize; i++) {
+        for (i = 0; i < setSize; i++) {
           clearCanvas();
           rectMode(CENTER);
           rotate(random(-0.1, 0.1));
           square(0, 0, r*2);
           addShape(trainingLabels[0]);
-      }
-    } else if (shape == 1) {       //create data to recognize circles
-        for ( i = 0; i < setSize; i++) {
+          saveCanvas(canvas, `square${i}.png`);  
+        }
+      } else if (shape == 1) {       //create data to recognize circles
+        for (i = 0; i < setSize; i++) {
           clearCanvas();
           circle(x, y, r*2);
+          saveCanvas(canvas, `circle${i}.png`);  
           addShape(trainingLabels[1]);
         }
       } else if (shape == 2) {     //create data to recognize triangles
-          for ( i = 0; i < setSize; i++) {
-           clearCanvas();
-           rotate(random(-0.1, 0.1));
-           triangle(0, -r, r, r, -r, r);
-           addShape(trainingLabels[2]);
+          for (i = 0; i < setSize; i++) {
+          clearCanvas();
+          rotate(random(-0.1, 0.1));
+          triangle(0, -r, r, r, -r, r);
+          saveCanvas(canvas, `triangle${i}.png`);  
+          addShape(trainingLabels[2]);
       }
     }
   }
 }
+
 
 
 function finishedTraining(){  // callback for shapeClassifier.train()
@@ -82,9 +84,8 @@ function finishedTraining(){  // callback for shapeClassifier.train()
 
 
 
-function addShape(label){
-  img = canvas.get();
-  shapeClassifier.addData({image: img}, {label: label});
+function addShape(image, label){
+  shapeClassifier.addData({image: image}, {label: label});
   console.log ("Added a", label, "to the training dataset!")
 }
 
@@ -105,7 +106,23 @@ let DRAW = {
   freeStore:[],
   lineStore:[]
 }
-// DRAWING CONTROLS START HERE 
+
+function clearCanvas() {
+  DRAW = {
+    FREE:[],
+    LINE:{
+      x1:undefined,
+      y1:undefined,
+      x2:undefined,
+      y2:undefined,
+    },
+    freeStore:[],
+    lineStore:[]
+  }
+  clear();
+  background(canvasSize.color);
+}
+
 function mousePressed() {
 
   if (keyIsDown(SHIFT) === false){  // allows freehand drawing
@@ -154,21 +171,6 @@ function drawLines(){  // RE-DRAWS ALL STORED LINES
 }
 
 
-function clearCanvas() {
-  DRAW = {
-    FREE:[],
-    LINE:{
-      x1:undefined,
-      y1:undefined,
-      x2:undefined,
-      y2:undefined,
-    },
-    freeStore:[],
-    lineStore:[]
-  }
-  clear();
-  background(canvasSize.color);
-}
 
 
 function drawSketches(array){  // RE-DRAWS ALL STORED FREEHAND DRAWINGS
