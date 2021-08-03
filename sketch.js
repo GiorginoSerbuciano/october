@@ -65,9 +65,12 @@ function createDataSet() {
       }
       if (shape == 0) {    //create data to recognize squares
         for (i = 0; i < setSize; i++) {
-
-          addShape(trainingLabels[0]);
+          clearCanvas();
+          rectMode(CENTER);
+          rotate(random(-0.1, 0.1));
+          square(0, 0, r*2);
           saveCanvas(canvas, `square${i}.png`);  
+          addShape(trainingLabels[0]);
         }
       } else if (shape == 1) {       //create data to recognize circles
         for (i = 0; i < setSize; i++) {
