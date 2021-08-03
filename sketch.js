@@ -11,6 +11,7 @@ const canvasSize = {
   color:255
 };
 
+let trainingLabels;
 function setup(){
   canvas = createCanvas(canvasSize.width, canvasSize.height);
 
@@ -25,6 +26,15 @@ function setup(){
 
   shapeClassifier = ml5.neuralNetwork(options);
   buttonsConfig();
+
+  trainingLabels = ["square","circle","triangle"];
+  for (i = 0; i < trainingLabels.length; i++){
+    let label = trainingLabels[i];
+    for (j = 0; j < trainingImages[label].length; j++){
+      image = loadImage(trainingImages[label][j]);
+      // addShape(trainingLabels[2]);
+    }
+  }
 }
 
 function buttonsConfig(){
