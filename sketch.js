@@ -1,3 +1,8 @@
+let trainingImages;
+function preload(){
+  trainingImages = loadJSON('imageList.json');  
+}
+
 let shapeClassifier;  // ml5.neuralnetwork()
 let canvas;  // createCanvas()
 const canvasSize = {
