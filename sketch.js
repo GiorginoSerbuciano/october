@@ -19,7 +19,7 @@ function setup(){
   console.log("RUNNING..."); 
 
   let options = {
-    inputs: [canvasSize.width, canvasSize.height,  4],
+    inputs: [128,128,4],
     task: "imageClassification",
     debug: "true"
   };
@@ -31,10 +31,12 @@ function setup(){
   for (i = 0; i < trainingLabels.length; i++){
     let label = trainingLabels[i];
     for (j = 0; j < trainingImages[label].length; j++){
-      image = loadImage(trainingImages[label][j]);
-      // addShape(trainingLabels[2]);
+      shape = loadImage(`shape_gen/data/${trainingImages[label][j]}`);
+      addShape(shape, trainingLabels[i]);
+      console.log(shape['width']);  // == 1?!
     }
   }
+  
 }
 
 function buttonsConfig(){
@@ -52,23 +54,18 @@ function buttonsConfig(){
 
 }
 
-
-let trainingLabels = ["square","circle","triangle"];  
-//function to create the training data for the NN
+// let trainingImages = loadJSON('imageList.json');  
+// let trainingLabels = ["square","circle","triangle"];
 function createDataSet() {
-    //create data to recognize shapes 
-    let setSize = 10;
-    for (shape = 0; shape < 3; shape++){
-      r = random (10, canvasSize.height/3);
-      x = random(r, canvasSize.width - r);
-      y = random(r, canvasSize.height - r);
-      translate(x, y);
+    for (i = 0; i < trainingLabels; i++){
+      label = trainingLabels[i];
+      console.log(i);
+      for (j = 0; j < trainingImages[label]; j++){
+        console.log(i, j);
+      }
       if (shape == 0) {    //create data to recognize squares
         for (i = 0; i < setSize; i++) {
-          clearCanvas();
-          rectMode(CENTER);
-          rotate(random(-0.1, 0.1));
-          square(0, 0, r*2);
+
           addShape(trainingLabels[0]);
           saveCanvas(canvas, `square${i}.png`);  
         }
@@ -101,7 +98,7 @@ function finishedTraining(){  // callback for shapeClassifier.train()
 
 function addShape(image, label){
   shapeClassifier.addData({image: image}, {label: label});
-  console.log ("Added a", label, "to the training dataset!")
+  console.log("Added a", label, "to the training dataset!")
 }
 
 
@@ -206,7 +203,6 @@ function draw() {
   for (let i = 0; i < DRAW.freeStore.length; i++){
     drawSketches(DRAW.freeStore[i]);
   }
-  
 }
 
 
