@@ -35,11 +35,7 @@ function setup(){
 
   shapeClassifier = ml5.neuralNetwork(options);
   buttonsConfig();
-  canvas = createCanvas(canvasSize.width, canvasSize.height);
-  background(canvasSize.color);
-  console.log("RUNNING...");
-  trainingLabels = ["square", "circle", "triangle"];
-
+ 
   for (i = 0; i < shapes.labels.length; i++){
     let label = shapes.labels[i];
     for (j = 0; j < imageFileNames[label].length; j++){
@@ -182,5 +178,4 @@ function draw() {
   for (let i = 0; i < DRAW.freeStore.length; i++) {
     drawSketches(DRAW.freeStore[i]);
   }
-  image(shapes["circle"][2],0,0);
 }
