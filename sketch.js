@@ -1,30 +1,31 @@
-let imageFileNames;
+let shapeCollection = {
+  TRAININGLABELS:["square", "circle", "triangle"],
+  imageFilenames:{},
+  imageObjects:{
+    square:[],
+    circle:[],
+    triangle:[],
+  }
+};
+
+
 function preload(){
-  imageFileNames = loadJSON('imageList.json');  
+  shapeCollection.imageFilenames = loadJSON('imageList.json');  
 }
 
 let shapeClassifier;  // ml5.neuralnetwork()
 let canvas;  // createCanvas()
-const canvasSize = {
+const CANVASPROPERTIES = {
   height:255, 
   width:255, 
-  color:255
+  color:255,
 };
 
-let shapes = {
-  "labels":[
-    "square",
-    "circle",
-    "triangle"
-  ],
-  "square":[],
-  "circle":[],
-  "triangle":[],
-};
+
 function setup(){
-  canvas = createCanvas(canvasSize.width, canvasSize.height);
+  canvas = createCanvas(CANVASPROPERTIES.width, CANVASPROPERTIES.height);
 
-  background(canvasSize.color);
+  background(CANVASPROPERTIES.color);
   console.log("RUNNING..."); 
 
   let options = {
@@ -35,11 +36,14 @@ function setup(){
 
   shapeClassifier = ml5.neuralNetwork(options);
   buttonsConfig();
- 
-  for (i = 0; i < shapes.labels.length; i++){
-    let label = shapes.labels[i];
-    for (j = 0; j < imageFileNames[label].length; j++){
-      shapes[label].push(loadImage(`data/${imageFileNames[label][j]}`));
+  
+  const LABELS = shapeCollection.TRAININGLABELS;
+  for (i = 0; i < LABELS.length; i++){
+    let label = LABELS[i];
+    let imageFiles = shapeCollection.imageFilenames[label];
+    for (j = 0; j < imageFiles.length; j++){
+      shapeCollection.imageObjects[label].push(loadImage(`data/${imageFiles[j]}`));
+      
     }
   }
   
@@ -51,8 +55,8 @@ function buttonsConfig() {
     "load": createButton('Load!')
   }
   
-  buttons.train.position(0, canvasSize.height + 10);
-  buttons.load.position(50, canvasSize.height + 10);
+  buttons.train.position(0, CANVASPROPERTIES.height + 10);
+  buttons.load.position(50, CANVASPROPERTIES.height + 10);
   
   buttons.train.mousePressed(startTraining);
   buttons.load.mousePressed(loadDataSet);
@@ -62,10 +66,13 @@ function buttonsConfig() {
 
 function loadDataSet() {
 
-  for (i = 0; i < shapes.labels.length; i++){
-    let label = shapes.labels[i];
-    for (j = 0; j < imageFileNames[label].length; j++){
-      img = shapes[label][j];
+  const LABELS = shapeCollection.TRAININGLABELS;
+  for (i = 0; i < LABELS.length; i++){
+    let label = LABELS[i];
+    let imageObjects = shapeCollection.imageObjects[label];
+    for (j = 0; j < imageObjects.length; j++){
+      let img = imageObjects[j];
+      console.log(img);
       addShape(img, label);
     }
   } 
@@ -86,72 +93,72 @@ function addShape(image, label) {
 
 
 function startTraining(){
-  shapeClassifier.train({ epochs: 50 }, finishedTraining);
+  shapeClassifier.train({ epochs: 20 }, finishedTraining);
 }
 
 
-let DRAW = {
-  FREE:[],
-  LINE: {
+let drawCollection = {
+  freeDrawing:[],
+  lineDrawing: {
     x1:undefined,
     y1:undefined,
     x2:undefined,
     y2:undefined,
   },
   freeStore:[],
-  lineStore:[]
+  lineStore:[],
 }
 
 function clearCanvas() {
-  DRAW = {
-    FREE:[],
-    LINE: {
+  drawCollection = {
+    freeDrawing:[],
+    lineDrawing: {
       x1:undefined,
       y1:undefined,
       x2:undefined,
       y2:undefined,
     },
     freeStore:[],
-    lineStore:[]
+    lineStore:[],
   }
   clear();
-  background(canvasSize.color);
+  background(CANVASPROPERTIES.color);
 }
 
 function mousePressed() {
   if (keyIsDown(SHIFT) === false) {  // allows freehand drawing
-    DRAW.FREE = [];  // if SHIFT is not being held, start a new drawing
+    drawCollection.freeDrawing = [];  // if SHIFT is not being held, start a new drawing
 
   } else if (keyIsDown(SHIFT) === true) {  // allows the drawing of a straight line
-    DRAW.LINE = {x1:mouseX, y1:mouseY, x2:undefined, y2:undefined};  // CLEARS X2 AND Y2; ELSE WOULD CONNECT TO PREVIOUSLY DRAWN LINE
+    drawCollection.lineDrawing = {x1:mouseX, y1:mouseY, x2:undefined, y2:undefined};  // CLEARS X2 AND Y2; ELSE WOULD CONNECT TO PREVIOUSLY DRAWN LINE
   }
 }
 
 function mouseDragged() {
   if (keyIsDown(SHIFT) === false) {  // FREEHAND DRAWING CONTROLS
-    DRAW.FREE.push( [mouseX,mouseY] ); // pushing every x/y coordinate of the pressed mouse
+    drawCollection.freeDrawing.push( [mouseX,mouseY] ); // pushing every x/y coordinate of the pressed mouse
     noFill();
-    drawSketches(DRAW.FREE);
+    drawSketches(drawCollection.freeDrawing);
   } else if (keyIsDown(SHIFT) === true) {  // LINE DRAWING CONTROLS
-    let l = DRAW.LINE;
-    DRAW.LINE = {x1:l.x1, y1:l.y1, x2:mouseX, y2:mouseY};
-    let x1 = DRAW.LINE.x1;
-    let y1 = DRAW.LINE.y1;
-    let x2 = DRAW.LINE.x2;
-    let y2 = DRAW.LINE.y2;
-    background(canvasSize.color);  // ALLOWS A SINGLE 'PREVIEW' LINE
+    let l = drawCollection.lineDrawing;
+    drawCollection.lineDrawing = {x1:l.x1, y1:l.y1, x2:mouseX, y2:mouseY};
+    let x1 = drawCollection.lineDrawing.x1;
+    let y1 = drawCollection.lineDrawing.y1;
+    let x2 = drawCollection.lineDrawing.x2;
+    let y2 = drawCollection.lineDrawing.y2;
+    background(CANVASPROPERTIES.color);  // ALLOWS A SINGLE 'PREVIEW' LINE
     line(x1, y1, x2, y2);  
   }
 }
 
 function mouseReleased() {
-  DRAW.freeStore.push(DRAW.FREE);
-  DRAW.lineStore.push(DRAW.LINE);
+  drawCollection.freeStore.push(drawCollection.freeDrawing);
+  drawCollection.lineStore.push(drawCollection.lineDrawing);
 }
 
 
 function drawLines() {  // RE-DRAWS ALL STORED LINES
-  let l = DRAW.lineStore;
+  let l = drawCollection.lineStore;
 
   for (let i = 0; i < l.length; i++) {  
     line(l[i].x1, l[i].y1, l[i].x2, l[i].y2);
@@ -175,7 +182,7 @@ function drawSketches(array) {  // RE-DRAWS ALL STORED FREEHAND DRAWINGS
 function draw() {
   drawLines();
 
-  for (let i = 0; i < DRAW.freeStore.length; i++) {
-    drawSketches(DRAW.freeStore[i]);
+  for (let i = 0; i < drawCollection.freeStore.length; i++) {
+    drawSketches(drawCollection.freeStore[i]);
   }
 }
