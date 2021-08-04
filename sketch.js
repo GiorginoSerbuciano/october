@@ -39,7 +39,7 @@ function setup(){
   for (i = 0; i < shapes.labels.length; i++){
     let label = shapes.labels[i];
     for (j = 0; j < imageFileNames[label].length; j++){
-      shapes[label].push(loadImage(`shape_gen/data/${imageFileNames[label][j]}`));
+      shapes[label].push(loadImage(`data/${imageFileNames[label][j]}`));
     }
   }
   
@@ -65,8 +65,8 @@ function loadDataSet() {
   for (i = 0; i < shapes.labels.length; i++){
     let label = shapes.labels[i];
     for (j = 0; j < imageFileNames[label].length; j++){
-      image = shapes[label][j];
-      addShape(image, label);
+      img = shapes[label][j];
+      addShape(img, label);
     }
   } 
 }
@@ -86,7 +86,7 @@ function addShape(image, label) {
 
 
 function startTraining(){
-  shapeClassifier.train({ epochs: 10 }, finishedTraining);
+  shapeClassifier.train({ epochs: 50 }, finishedTraining);
 }
 
 
