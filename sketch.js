@@ -1,6 +1,6 @@
-let trainingImages;
+let imageFileNames;
 function preload(){
-  trainingImages = loadJSON('imageList.json');  
+  imageFileNames = loadJSON('imageList.json');  
 }
 
 let shapeClassifier;  // ml5.neuralnetwork()
@@ -11,7 +11,16 @@ const canvasSize = {
   color:255
 };
 
-let trainingLabels;
+let shapes = {
+  "labels":[
+    "square",
+    "circle",
+    "triangle"
+  ],
+  "square":[],
+  "circle":[],
+  "triangle":[],
+};
 function setup(){
   canvas = createCanvas(canvasSize.width, canvasSize.height);
 
@@ -27,13 +36,10 @@ function setup(){
   shapeClassifier = ml5.neuralNetwork(options);
   buttonsConfig();
 
-  trainingLabels = ["square","circle","triangle"];
-  for (i = 0; i < trainingLabels.length; i++){
-    let label = trainingLabels[i];
-    for (j = 0; j < trainingImages[label].length; j++){
-      shape = loadImage(`shape_gen/data/${trainingImages[label][j]}`);
-      addShape(shape, trainingLabels[i]);
-      console.log(shape['width']);  // == 1?!
+  for (i = 0; i < shapes.labels.length; i++){
+    let label = shapes.labels[i];
+    for (j = 0; j < imageFileNames[label].length; j++){
+      shapes[label].push(loadImage(`shape_gen/data/${imageFileNames[label][j]}`));
     }
   }
   
@@ -43,52 +49,27 @@ function buttonsConfig(){
 
   buttons = {
     "train": createButton('Train!'),
-    "generate": createButton('Generate!')
+    "load": createButton('Load!')
   }
   
   buttons.train.position(0, canvasSize.height + 10);
-  buttons.generate.position(50, canvasSize.height + 10);
+  buttons.load.position(50, canvasSize.height + 10);
   
   buttons.train.mousePressed(startTraining);
-  buttons.generate.mousePressed(createDataSet);
+  buttons.load.mousePressed(loadDataSet);
 
 }
 
-// let trainingImages = loadJSON('imageList.json');  
-// let trainingLabels = ["square","circle","triangle"];
-function createDataSet() {
-    for (i = 0; i < trainingLabels; i++){
-      label = trainingLabels[i];
-      console.log(i);
-      for (j = 0; j < trainingImages[label]; j++){
-        console.log(i, j);
-      }
-      if (shape == 0) {    //create data to recognize squares
-        for (i = 0; i < setSize; i++) {
-          clearCanvas();
-          rectMode(CENTER);
-          rotate(random(-0.1, 0.1));
-          square(0, 0, r*2);
-          saveCanvas(canvas, `square${i}.png`);  
-          addShape(trainingLabels[0]);
-        }
-      } else if (shape == 1) {       //create data to recognize circles
-        for (i = 0; i < setSize; i++) {
-          clearCanvas();
-          circle(x, y, r*2);
-          saveCanvas(canvas, `circle${i}.png`);  
-          addShape(trainingLabels[1]);
-        }
-      } else if (shape == 2) {     //create data to recognize triangles
-          for (i = 0; i < setSize; i++) {
-          clearCanvas();
-          rotate(random(-0.1, 0.1));
-          triangle(0, -r, r, r, -r, r);
-          saveCanvas(canvas, `triangle${i}.png`);  
-          addShape(trainingLabels[2]);
-      }
+
+function loadDataSet() {
+
+  for (i = 0; i < shapes.labels.length; i++){
+    let label = shapes.labels[i];
+    for (j = 0; j < imageFileNames[label].length; j++){
+      image = shapes[label][j];
+      addShape(image, label);
     }
-  }
+  } 
 }
 
 
@@ -105,8 +86,8 @@ function addShape(image, label){
 }
 
 
-function startTraining(epochs){
-  shapeClassifier.train({ epochs: epochs }, finishedTraining);
+function startTraining(){
+  shapeClassifier.train({ epochs: 10 }, finishedTraining);
 }
 
 
@@ -206,6 +187,7 @@ function draw() {
   for (let i = 0; i < DRAW.freeStore.length; i++){
     drawSketches(DRAW.freeStore[i]);
   }
+  image(shapes["circle"][2],0,0);
 }
 
 
