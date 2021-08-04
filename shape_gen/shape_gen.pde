@@ -25,20 +25,16 @@ void draw(){
       circle(x, y, r*2);
       saveFrame("data/circle_###.png");  
     } else if (i == 2) {     //create data to recognize triangles
-      float t = random(10, w/2);  // 10,64
       background(255);
-      if (t * 2 > w){                             
-        rotate(random(-0.25, 0));
-        triangle(t, -t + t, t, t, -t + t, t); 
-      } else {
-        translate(t, t);
-        rotate(random(-0.99,0.99));
-        triangle(t, -t + t, t, t, -t + t, t); 
-      }
+      float t = random(10, 25);
+
+      translate(w/2, w/2);
+      rotate(random(-0.99, 0.99));
+      triangle(t, -t, t, t, -t, t); 
       saveFrame("data/triangle_###.png");  
     }
   }
-  if (frameCount == 20){
+  if (frameCount == 200){
     exit();
   }
 }
