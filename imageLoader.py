@@ -1,6 +1,6 @@
 import os, json
 
-data_folder = os.listdir('shape_gen//data')
+data_folder = os.listdir('data')
 
 image_list = [name for name in data_folder]
 

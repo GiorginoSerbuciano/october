@@ -1,4 +1,5 @@
+imageList.json
 .vscode/settings.json
-shape_gen/3angle_test.pde
+shape_gen
 data*
 __pycache__
