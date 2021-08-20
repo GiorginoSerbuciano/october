@@ -35,14 +35,35 @@ function setup(){
   buttonsConfig();
 }
 
+
 function buttonsConfig() {
   buttons = {
     "train": createButton('Train!'),
+    "load": createButton('Load!')
   }
   
   buttons.train.position(0, CANVASPROPERTIES.height + 10);
+  buttons.load.position(50, CANVASPROPERTIES.height + 10);
+  
   buttons.train.mousePressed(startTraining);
+  buttons.load.mousePressed(loadTrainedModel);
 }
+
+
+function loadTrainedModel(){
+  const modelDetails = {
+    model: 'model/model.json',
+    metadata: 'model/model_meta.json',
+    weights: 'model/model.weights.bin'
+  }
+  shapeClassifier.load(modelDetails, modelLoaded);
+}
+
+
+function modelLoaded(){
+  console.log(">>> MODEL LOADED <<<")
+}
+
 
 function startTraining(){
   shapeClassifier.train({ epochs: 50 }, finishedTraining);
