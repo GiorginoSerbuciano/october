@@ -14,49 +14,33 @@ function preload(){
 }
 
 
-let shapeClassifier;  
-const LABELS = shapeCollection;
-function setup(){
-  console.log("RUNNING..."); 
-
-  let options = {
-    inputs: [128, 128, 4],
-    task: "imageClassification",
-    debug: "true",
-  }
-  shapeClassifier = ml5.neuralNetwork(options);
-  for (label in shapeCollection){
-    for (item in shapeCollection[label]){
-      let image = shapeCollection[label][item];
-      shapeClassifier.addData( {image: image}, {label: label} );
-    }
-  }
-  shapeClassifier.normalizeData();  
-  buttonsConfig();
-}
-
-
 function buttonsConfig() {
   buttons = {
     "train": createButton('Train!'),
-    "load": createButton('Load!')
+    "classify": createButton('Classify!'),
+    "clear": createButton('Clear!'),
   }
-  
-  buttons.train.position(0, CANVASPROPERTIES.height + 10);
-  buttons.load.position(50, CANVASPROPERTIES.height + 10);
-  
+  buttons.train.position(0, canvas.height + 10);
+  buttons.classify.position(50, canvas.height + 10);
+  buttons.clear.position(100,canvas.height + 10)
   buttons.train.mousePressed(startTraining);
-  buttons.load.mousePressed(loadTrainedModel);
+  buttons.classify.mousePressed(classify);
+  buttons.clear.mousePressed(clearCanvas);
 }
 
 
-function loadTrainedModel(){
-  const modelDetails = {
-    model: 'model/model.json',
-    metadata: 'model/model_meta.json',
-    weights: 'model/model.weights.bin'
+function handleResult(error,result){
+  if (error){
+    console.error(error);
+    return;
+  } else {
+    console.log(result);
   }
-  shapeClassifier.load(modelDetails, modelLoaded);
+}
+
+function classify(){
+  shapeClassifier.classify( {image: canvas.get(0,0,64,64)} , handleResult);
+  
 }
 
 
@@ -73,4 +57,5 @@ function startTraining(){
 function finishedTraining() {  
   console.log(">>> TRAINING FINISHED <<<")
 }
+
 
