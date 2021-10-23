@@ -14,19 +14,6 @@ function preload(){
 }
 
 
-function buttonsConfig() {
-  buttons = {
-    "train": createButton('Train!'),
-    "classify": createButton('Classify!'),
-    "clear": createButton('Clear!'),
-  }
-  buttons.train.position(0, canvas.height + 10);
-  buttons.classify.position(50, canvas.height + 10);
-  buttons.clear.position(100,canvas.height + 10)
-  buttons.train.mousePressed(startTraining);
-  buttons.classify.mousePressed(classify);
-  buttons.clear.mousePressed(clearCanvas);
-}
 
 
 function handleResult(error,result){
