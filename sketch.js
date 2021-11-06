@@ -1,9 +1,7 @@
 let canvas;  // createCanvas()
-let bkg = 255;
-let weight = 2;
-
+let bkg = 0;
 function setup(){
-  canvas = createCanvas(512,512);
+  canvas = createCanvas(windowWidth,windowHeight);
   background(bkg);
   let options = {
     inputs: [64, 64, 4],
@@ -24,53 +22,35 @@ function setup(){
     weights: 'model/model.weights.bin'
   }
   shapeClassifier.load(modelDetails, modelLoaded);
-  buttonsConfig();
+  // buttonsConfig();
 }
 
 
-let drawCollection = {
-  freeDrawing:[],
-  lineDrawing: {
-    x1:undefined,
-    y1:undefined,
-    x2:undefined,
-    y2:undefined,
-  },
-  freeStore:[],
-  lineStore:[],
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  background(bkg);
+}
+
+
+let drawing = {
+  current:[],
+  store:[],
 }
 function clearCanvas() {
-  drawCollection = {
-    freeDrawing:[],
-    lineDrawing: {
-      x1:undefined,
-      y1:undefined,
-      x2:undefined,
-      y2:undefined,
-    },
-    freeStore:[],
-    lineStore:[],
+  drawing = {
+    current:[],
+    store:[],
   }
   clear();
   background(bkg);
 }
 
 
-
-
-function drawLines() {  // RE-DRAWS ALL STORED LINES
-  let l = drawCollection.lineStore;
-  strokeWeight(weight);
-
-  for (let i = 0; i < l.length; i++) {  
-    line(l[i].x1, l[i].y1, l[i].x2, l[i].y2);
-  }
-}
-
-
-function drawSketches(array) {  // RE-DRAWS ALL STORED FREEHAND DRAWINGS
+let weight = 2;
+function drawSketches(array) { 
   beginShape();
-  strokeWeight(weight);
+  strokeWeight(weight); 
+  stroke(255);
 
   for (let i = 0; i < array.length; i++) { 
     let x = array[i][0];
@@ -80,11 +60,3 @@ function drawSketches(array) {  // RE-DRAWS ALL STORED FREEHAND DRAWINGS
   endShape(); 
 }
 
-
-function draw() {
-  strokeWeight(weight);
-  drawLines();
-  for (let i = 0; i < drawCollection.freeStore.length; i++) {
-    drawSketches(drawCollection.freeStore[i]);
-  }
-}
