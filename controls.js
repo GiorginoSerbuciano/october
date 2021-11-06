@@ -14,35 +14,28 @@ function buttonsConfig() {
 
 
 function keyPressed() {
-  if (keyCode === 67) {
+  if (keyCode === 67) {  // "c"
     clearCanvas();
+  } else if (keyCode === 83) {  // "s"
+    classify();
   }
 }
 
 
 function mousePressed() {
-  if (keyIsDown(SHIFT) === false) {  // allows freehand drawing
-    drawCollection.free = [];  // if SHIFT is not being held, start a new drawing
-    drawCollection.clone1 = []; 
-  } 
+  drawing.current = [];  // if SHIFT is not being held, start a new drawing
 }
 
 
-
 function mouseDragged() {
-  if (keyIsDown(SHIFT) === false) {  // FREEHAND DRAWING CONTROLS
-    drawCollection.free.push( [mouseX,mouseY] ); // pushing every x/y coordinate of the pressed mouse
-    drawCollection.clone1.push( [mouseX*20,mouseY*20] ); // pushing every x/y coordinate of the pressed mouse
-    noFill();
-    // drawSketches(drawCollection.free);
-    drawSketches(drawCollection.clone1);
-  } 
+  let r = 15;
+  noFill();
+  drawing.current.push( [Math.round(mouseX/r)*r,Math.round(mouseY/r)*r] ); // pushing every x/y coordinate of the pressed mouse
+  drawSketches(drawing.current);
 }
 
 
 function mouseReleased() {
-  drawCollection.freeStore.push(drawCollection.free);
-  drawCollection.cloneStore.push(drawCollection.clone1);
-  drawCollection.lineStore.push(drawCollection.line);
+  drawing.store.push(drawing.current);
 }
 
