@@ -3,6 +3,7 @@ let bkg = 255;
 function setup(){
   canvas = createCanvas(windowWidth,windowHeight);
   background(bkg);
+  area();
   let options = {
     inputs: [64, 64, 4],
     task: "imageClassification",
@@ -16,7 +17,12 @@ function setup(){
   }
   shapeClassifier.load(modelDetails, modelLoaded);
 }
-  // buttonsConfig();
+function area(){
+  noFill();
+  strokeWeight(1);
+  stroke(bkg - 255);
+  square(0,0,256);
+}
 function modelLoaded(){
   console.log(">>> MODEL LOADED <<<")
 }
@@ -57,6 +63,7 @@ function clearCanvas() {
   }
   clear();
   background(bkg);
+  area();
 }
 
 
