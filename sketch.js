@@ -1,5 +1,5 @@
-let canvas;  // createCanvas()
-let bkg = 0;
+let canvas;
+let bkg = 255;
 function setup(){
   canvas = createCanvas(windowWidth,windowHeight);
   background(bkg);
@@ -9,20 +9,34 @@ function setup(){
     debug: "true",
   }
   shapeClassifier = ml5.neuralNetwork(options);
-  for (label in shapeCollection){
-    for (item in shapeCollection[label]){
-    let image = shapeCollection[label][item];
-    shapeClassifier.addData( {image: image}, {label: label} );
-    }
-  }
-  shapeClassifier.normalizeData(); 
   const modelDetails = {
     model: 'model/model.json',
     metadata: 'model/model_meta.json',
     weights: 'model/model.weights.bin'
   }
   shapeClassifier.load(modelDetails, modelLoaded);
+}
   // buttonsConfig();
+function modelLoaded(){
+  console.log(">>> MODEL LOADED <<<")
+}
+
+
+function classify(){
+  let img = canvas.get(0,0,256,256);
+  img.resize(64,64);
+  image(img, 0, 260);
+  shapeClassifier.classify( {image: img} , handleResult);
+}
+
+
+function handleResult(error,result){
+  if (error){
+    console.error(error);
+    return;
+  } else {
+    console.log(result);
+  }
 }
 
 
@@ -46,11 +60,10 @@ function clearCanvas() {
 }
 
 
-let weight = 2;
 function drawSketches(array) { 
   beginShape();
-  strokeWeight(weight); 
-  stroke(255);
+  strokeWeight(4); 
+  stroke(bkg - 255);
 
   for (let i = 0; i < array.length; i++) { 
     let x = array[i][0];

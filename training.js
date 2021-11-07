@@ -1,38 +1,39 @@
-let shapeCollection = {
+let shapes = {
   square:[],
   circle:[],
   triangle:[],
 }
-let setSize = 20;
+let size = 20;
 function preload(){
-  for (label in shapeCollection){
-    for (counter = 0; counter < setSize; counter++){
+  for (label in shapes){
+    for (counter = 0; counter < size; counter++){
       let index = nf(counter+1,3,0);
-      shapeCollection[label].push(loadImage(`data/${label}_${index}.png`));
+      shapes[label].push(loadImage(`data/${label}_${index}.png`));
     }
   }
 }
 
 
-
-
-function handleResult(error,result){
-  if (error){
-    console.error(error);
-    return;
-  } else {
-    console.log(result);
+function setup(){
+  let options = {
+    inputs: [64, 64, 4],
+    task: "imageClassification",
+    debug: "true",
   }
+  shapeClassifier = ml5.neuralNetwork(options);
+  for (label in shapes){
+    for (item in shapes[label]){
+    let image = shapes[label][item];
+    shapeClassifier.addData( {image: image}, {label: label} );
+    }
+  }
+  shapeClassifier.normalizeData(); 
 }
 
-function classify(){
-  shapeClassifier.classify( {image: canvas.get(0,0,64,64)} , handleResult);
-  
-}
-
-
-function modelLoaded(){
-  console.log(">>> MODEL LOADED <<<")
+function keyPressed() {
+  if (keyCode === 84) {  // "t"
+    startTraining();
+  }
 }
 
 
@@ -43,6 +44,8 @@ function startTraining(){
 
 function finishedTraining() {  
   console.log(">>> TRAINING FINISHED <<<")
+  shapeClassifier.save();
 }
+
 
 
