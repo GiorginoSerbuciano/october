@@ -14,6 +14,7 @@ void setup(){
 void draw(){
   m++;
   background(200,200,200);   
+  strokeWeight(2);
   pushMatrix();
   int d = round(random(50,120));  // curve modifier
   for (int i = 0; i < m; i++){
@@ -44,9 +45,8 @@ void draw(){
       cpy2 = yr-d;
     }
     
-    strokeWeight(2);
-    noFill();
-    curve(cpx1, cpy1, x1, y1, xr, yr, cpx2, cpy2);
+      noFill();
+      curve(cpx1, cpy1, x1, y1, xr, yr, cpx2, cpy2);
 
     x1 = xr;  // stores last x-coord
     y1 = yr;  // stores last y-coord  
