@@ -1,14 +1,15 @@
-let shapes = {
-  square:[],
-  circle:[],
-  triangle:[],
+let leaves = {
+  three:[],
+  four:[],
+  five:[],
+  six:[],
 }
-let size = 20;
+let size = 100;
 function preload(){
-  for (label in shapes){
+  for (label in leaves){
     for (counter = 0; counter < size; counter++){
       let index = nf(counter+1,3,0);
-      shapes[label].push(loadImage(`data/${label}_${index}.png`));
+      leaves[label].push(loadImage(`data/leaf_${label}_${index}.png`));
     }
   }
 }
@@ -16,14 +17,14 @@ function preload(){
 
 function setup(){
   let options = {
-    inputs: [64, 64, 4],
+    inputs: [70, 70, 4],
     task: "imageClassification",
     debug: "true",
   }
   shapeClassifier = ml5.neuralNetwork(options);
-  for (label in shapes){
-    for (item in shapes[label]){
-    let image = shapes[label][item];
+  for (label in leaves){
+    for (item in leaves[label]){
+    let image = leaves[label][item];
     shapeClassifier.addData( {image: image}, {label: label} );
     }
   }
@@ -38,7 +39,7 @@ function keyPressed() {
 
 
 function startTraining(){
-  shapeClassifier.train({ epochs: 50 }, finishedTraining);
+  shapeClassifier.train({ epochs: 10 }, finishedTraining);
 }
 
 

@@ -13,7 +13,7 @@ function mousePressed() {
 
 
 function mouseDragged() {
-  let r = 15;  // "Zoom factor"
+  let r = 5;  // "Zoom factor"
   noFill();
   drawing.current.push( [Math.round(mouseX/r)*r,Math.round(mouseY/r)*r] );
   drawSketches(drawing.current);

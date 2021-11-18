@@ -5,7 +5,7 @@ function setup(){
   background(bkg);
   area();
   let options = {
-    inputs: [64, 64, 4],
+    inputs: [70, 70, 4],
     task: "imageClassification",
     debug: "true",
   }
@@ -30,7 +30,7 @@ function modelLoaded(){
 
 function classify(){
   let img = canvas.get(0,0,256,256);
-  img.resize(64,64);
+  img.resize(70,70);
   image(img, 0, 260);
   shapeClassifier.classify( {image: img} , handleResult);
 }

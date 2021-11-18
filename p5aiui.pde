@@ -1,28 +1,25 @@
-int cpx1; // x-coord of control point for curve start
-int cpy1; // y-coord of control point for curve start
-int cpx2; // x-coord of control point for curve end
-int cpy2; // y-coord of control point for curve end
+int cpx1;  // x-coord of control point for curve start
+int cpy1;  // y-coord of control point for curve start
+int cpx2;  // x-coord of control point for curve end
+int cpy2;  // y-coord of control point for curve end
+int m = 2;  // number of vertices, i.e. number of rotations around circle
+int x1 = 64;  // default starting x-coordinate
+int y1 = 32;  // default starting y-coordinate
 
 void setup(){
   size(70,70); 
-  frameRate(5);
+  // frameRate(2);
 }
 
 void draw(){
-  int r = round(random(10,64));   // radius of circle
-  int m = round(random(3,7));   // number of vertices, i.e. number of rotations around circle
-  int d = round(random(50,100));  // curve modifier
-  int x1 = 64;  // default starting x-coordinate
-  int y1 = 32;  // default starting y-coordinate
-
+  m++;
   background(200,200,200);   
   pushMatrix();
-
+  int d = round(random(50,120));  // curve modifier
   for (int i = 0; i < m; i++){
     float angle = TWO_PI / m;  // a circle divided by the number of rotations
     int xr = round(cos(angle*(i+1))*32 + 32);  // x-coord of next point along circle
     int yr = round(sin(angle*(i+1))*32 + 32);  // y-coord of next point along circle 
-
 
     // This block determines the position of the control points -- WIP
     if (xr >= 32 && yr >= 32){  // bottom-right quadrant
@@ -31,7 +28,7 @@ void draw(){
       cpx2 = xr;
       cpy2 = yr+d;
     } else if (xr >= 32 && yr <= 32) {  // top-right quadrant
-      cpx1 = x1+d;
+      cpx1 = x1;
       cpy1 = y1-d;
       cpx2 = xr+d;
       cpy2 = yr;
@@ -40,10 +37,10 @@ void draw(){
       cpy1 = y1+d;
       cpx2 = xr-d;
       cpy2 = yr+d;
-    } else if (xr <= 32 && yr <= 32) {  // top-left quadrand
-      cpx1 = x1+d;
-      cpy1 = y1-d;
-      cpx2 = xr-d;
+    } else if (xr <= 32 && yr <= 32) {  // top-left quadrant
+      cpx1 = x1-d;
+      cpy1 = y1+d;
+      cpx2 = xr;
       cpy2 = yr-d;
     }
     
@@ -52,14 +49,21 @@ void draw(){
     curve(cpx1, cpy1, x1, y1, xr, yr, cpx2, cpy2);
 
     x1 = xr;  // stores last x-coord
-    y1 = yr;  // stores last y-coord
-
+    y1 = yr;  // stores last y-coord  
+  }
+  String fileString = "data/leaf_"+m+"_###.png";
+  // saveFrame("data/leaf_6_###.png"); 
+  saveFrame(fileString); 
+  popMatrix();
+  
+  if (m > 6) {
+    m = 2;
   }
 
-  popMatrix();   
-
-  if (frameCount == 100){
+  if (frameCount == 500){
     exit();
   }
+  
+
 
 }
