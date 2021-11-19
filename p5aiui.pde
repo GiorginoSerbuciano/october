@@ -1,24 +1,26 @@
-int cpx1;  // x-coord of control point for curve start
-int cpy1;  // y-coord of control point for curve start
-int cpx2;  // x-coord of control point for curve end
-int cpy2;  // y-coord of control point for curve end
-int m = 2;  // number of vertices, i.e. number of rotations around circle
+int cpx1, cpy1, cpx2, cpy2;  // coordinates of curve control points
+int m = 6;  // number of vertices, i.e. number of rotations around circle
 int x1 = 64;  // default starting x-coordinate
 int y1 = 32;  // default starting y-coordinate
+int setSize = 200;  // determines the number of drawings produced
 
 void setup(){
   size(70,70); 
-  // frameRate(2);
+  frameRate(30);
 }
 
 void draw(){
+
+  stroke(255);
+  strokeWeight(2);
+  background(22, 22, 29);   
+  noFill();
+
   pushMatrix();
-  if (frameCount < 200){
-    exit();
-    m++;
-    background(200,200,200);   
-    strokeWeight(2);
-    int d = round(random(50,120));  // curve modifier
+  if (frameCount < setSize + 1){
+    print(frameCount, "lobed \n");
+    int d = round(random(50,150));  // curve modifier
+    
     for (int i = 0; i < m; i++){
       float angle = TWO_PI / m;  // a circle divided by the number of rotations
       int xr = round(cos(angle*(i+1))*32 + 32);  // x-coord of next point along circle
@@ -52,24 +54,25 @@ void draw(){
 
       x1 = xr;  // stores last x-coord
       y1 = yr;  // stores last y-coord  
-    }
-    saveFrame("data/lobed_###.png"); 
-    popMatrix();
-    
-    if (m > 6) {
-      m = 2;
+
     }
 
-  } else if (frameCount > 200) {
+    // saveFrame("data/lobed_###.png"); 
+    popMatrix();
+
+  } else if (frameCount > setSize && frameCount < 1 + setSize * 2) {
+
+    print(frameCount, "whole \n");
+
     int width = round(random(15, 60));
     int height = round(random(15, 60));
-    for (int i = 0; i < 50; i++) {
-      ellipse(35, 35, width, height); //creates oval shapes with semi-random size through width, height parameters
-      noFill();
-      saveFrame("data/whole_###.png");
+
+    ellipse(35, 35, width, height); //creates oval shapes with semi-random size through width, height parameters
+
+    saveFrame("data/entire_###.png");
     popMatrix();
-  
-  } else if (frameCount === 400) {
+
+  } else if (frameCount == 1 + setSize * 2) {
     exit();
   }
 }
