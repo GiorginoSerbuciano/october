@@ -1,8 +1,9 @@
 let canvas;
-let bkg = 255;
+let colors = {'background': (22,22,29), 'drawing': (255),}
+
 function setup(){
   canvas = createCanvas(windowWidth,windowHeight);
-  background(bkg);
+  background(colors.background);
   area();
   let options = {
     inputs: [70, 70, 4],
@@ -20,7 +21,7 @@ function setup(){
 function area(){
   noFill();
   strokeWeight(1);
-  stroke(bkg - 255);
+  stroke(colors.drawing);
   square(0,0,256);
 }
 function modelLoaded(){
@@ -31,8 +32,7 @@ function modelLoaded(){
 function classify(){
   let img = canvas.get(0,0,256,256);
   img.resize(70,70);
-  image(img, 0, 260);
-  shapeClassifier.classify( {image: img} , handleResult);
+  let result = shapeClassifier.classify( {image: img} , handleResult)
 }
 
 
@@ -41,14 +41,48 @@ function handleResult(error,result){
     console.error(error);
     return;
   } else {
-    console.log(result);
+    // console.log(result);
+    return tree(result);
   }
 }
 
 
+function tree(result) {
+  let l_mod = result[0].confidence;
+  let label = result[0].label;
+  let angle;
+  if (label === 'lobed'){
+    angle = QUARTER_PI - random(0,0.3) * QUARTER_PI;
+  } else if (label === 'entire') {
+    angle = QUARTER_PI - random(0.4, 0.7) * QUARTER_PI;
+  } 
+  let len = 200 * l_mod;
+  
+  translate(width/2, height);
+  console.log(label);
+  return branch(angle, len);
+}
+
+function branch(angle, len) {
+  strokeWeight(3);
+  line(0, 0, 0, -len);
+  translate(0, -len);
+  if (len > 20) {
+    push();
+    rotate(angle);
+    branch(angle, len * 0.67);
+    pop();
+    push();
+    rotate(-angle);
+    branch(angle, len * 0.67);
+    pop();
+  }
+  translate(-width/2, -height+len);
+}
+
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-  background(bkg);
+  background(colors.background);
 }
 
 
@@ -62,7 +96,7 @@ function clearCanvas() {
     store:[],
   }
   clear();
-  background(bkg);
+  background(colors.background);
   area();
 }
 
@@ -70,7 +104,7 @@ function clearCanvas() {
 function drawSketches(array) { 
   beginShape();
   strokeWeight(4); 
-  stroke(bkg - 255);
+  stroke(colors.drawing);
 
   for (let i = 0; i < array.length; i++) { 
     let x = array[i][0];
