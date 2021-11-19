@@ -60,6 +60,15 @@ void draw(){
     m = 2;
   }
 
+  int width = round(random(15, 60));
+  int height = round(random(15, 60));
+  for (int i = 0; i < 50; i++) {
+    ellipse(35, 35, width, height); //creates oval shapes with semi-random size through width, height parameters
+    noFill();
+    //saveFrame("data/entireLeaf_###.png");
+  }
+    popMatrix();
+
   if (frameCount == 500){
     exit();
   }
