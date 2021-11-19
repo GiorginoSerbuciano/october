@@ -80,3 +80,27 @@ function drawSketches(array) {
   endShape(); 
 }
 
+function nameTree() {
+  genus = {
+    "lobed": ["Acacia", "Ailanthus", "Bombax", "Brahea", "Castanea", "Celtis", "Dacrydium", "Dicksonia", 
+    "Elaeagnus", "Euonymus", "Fagus", "Ficus", "Ginko", "Grevillea", "Harpullia", "Howea", "Ilex", "Jacaranda", 
+    "Juglans", "Kalopanax", "Kigelia", "Lagerstroemia", "Licaria", "Magnolia", "Mimosa", "Nectandra", "Nyssa", 
+    "Olea", "Paulownia", "Phoenix", "Raphia", "Rhododendron", "Sassafras", "Streblus", "Terminalia", 
+    "Tsuga", "Ulmus", "Vachellia", "Viburnum", "Wollemia", "Yucca", "Zelkova"], 
+    "entire": ["Agathis", "Archontophoenix", "Brosimum", "Buxus", "Calocedrus", "Cinnamomum", "Dalbergia", 
+    "Diospyros", "Elaeis", "Euphorbia", "Firmiana", "Fraxinus", "Gleditsia", "Gymnanthes", "Hibiscus", "Hymenaea", 
+    "Illicium", "Inga", "Jubaea", "Juniperus", "Khaya", "Kokia", "Laburnum", "Lithocarpus", "Melia", "Morus", 
+    "Nerium", "Nothofagus", "Ostrya", "Persea", "Populus", "Quercus", "Rhus", "Robinia", "Schinus", "Spondias", 
+    "Taxodium", "Thespesia", "Vitex", "Xylosma", "Zanthoxylum"]
+  };
+  species = ["abbreviata", "acellerata", "alnoides", "balsamea", "borealis", "brownii", "calantha", "centralis", 
+    "chamaeleon", "decidua", "depressa", "difformis", "elata", "erioloba", "excelsa", "falcata", "filicifolia", 
+    "fulva", "gentlei", "gilesiana", "glaucescens", "hamiltoniana", "hemignosta", "holosericea", "inaequilatera", 
+    "insignis", "ixodes", "jacquemontii", "jennerae", "juncifolia", "karroo", "kelloggiana", "kybeanensis", 
+    "lamprocarpa", "lanuginophylla", "leichhardtii", "macnuttiana", "macradenia", "myrtifolia", "neovernicosa", 
+    "nilotica", "notabilis", "obliquinervia", "oliveri", "oxycedrus", "papulosa", "pennatula", "petraea", 
+    "quinquenervia", "quintanilhae", "quornensis", "ramulosa", "rehmanniana", "retusa", "sakalava", "semperflorens", 
+    "shuttleworthii", "taylori", "tonkinensis", "translucens", "umbellata", "uncinata", "urophylla", "varia", 
+    "victoriae", "villaregalis", "weberbaueri", "wetarensis", "willardiana", "xanthina", "xerophila", "xiphophylla", 
+    "yirrkallensis", "yorkrakinensis", "yunnanensis", "zapatensis", "zatrichota", "zygia"];
+}
