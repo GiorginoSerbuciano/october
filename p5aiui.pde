@@ -57,7 +57,7 @@ void draw(){
 
     }
 
-    // saveFrame("data/lobed_###.png"); 
+    saveFrame("data/lobed_###.png"); 
     popMatrix();
 
   } else if (frameCount > setSize && frameCount < 1 + setSize * 2) {
