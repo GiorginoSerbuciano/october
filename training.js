@@ -1,9 +1,8 @@
 let leaves = {
-  three:[],
-  four:[],
-  five:[],
-  six:[],
+  lobed:[],
+  entire:[],
 }
+
 let size = 100;
 function preload(){
   for (label in leaves){
