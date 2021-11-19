@@ -62,7 +62,7 @@ void draw(){
 
   } else if (frameCount > setSize && frameCount < 1 + setSize * 2) {
 
-    print(frameCount, "whole \n");
+    print(frameCount, "entire \n");
 
     int width = round(random(15, 60));
     int height = round(random(15, 60));
