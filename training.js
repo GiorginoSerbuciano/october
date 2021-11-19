@@ -3,13 +3,14 @@ let leaves = {
   entire:[],
 }
 
-let size = 100;
+let size = 200;
+let index;
 function preload(){
-  for (label in leaves){
-    for (counter = 0; counter < size; counter++){
-      let index = nf(counter+1,3,0);
-      leaves[label].push(loadImage(`data/leaf_${label}_${index}.png`));
-    }
+  for (counter = 0; counter < size; counter++){
+    index = nf(counter + 1, 3, 0);
+    leaves.lobed.push(loadImage(`data/lobed_${index}.png`));
+    index = nf(counter + 201, 3, 0);
+    leaves.entire.push(loadImage(`data/entire_${index}.png`));
   }
 }
 
@@ -38,7 +39,7 @@ function keyPressed() {
 
 
 function startTraining(){
-  shapeClassifier.train({ epochs: 10 }, finishedTraining);
+  shapeClassifier.train({ epochs: 20 }, finishedTraining);
 }
 
 
