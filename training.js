@@ -1,48 +1,52 @@
-let shapeCollection = {
-  square:[],
-  circle:[],
-  triangle:[],
+let leaves = {
+  lobed:[],
+  entire:[],
 }
-let setSize = 20;
+
+let size = 200;
+let index;
 function preload(){
-  for (label in shapeCollection){
-    for (counter = 0; counter < setSize; counter++){
-      let index = nf(counter+1,3,0);
-      shapeCollection[label].push(loadImage(`data/${label}_${index}.png`));
+  for (counter = 0; counter < size; counter++){
+    index = nf(counter + 1, 3, 0);
+    leaves.lobed.push(loadImage(`data/lobed_${index}.png`));
+    index = nf(counter + 201, 3, 0);
+    leaves.entire.push(loadImage(`data/entire_${index}.png`));
+  }
+}
+
+
+function setup(){
+  let options = {
+    inputs: [70, 70, 4],
+    task: "imageClassification",
+    debug: "true",
+  }
+  shapeClassifier = ml5.neuralNetwork(options);
+  for (label in leaves){
+    for (item in leaves[label]){
+    let image = leaves[label][item];
+    shapeClassifier.addData( {image: image}, {label: label} );
     }
   }
+  shapeClassifier.normalizeData(); 
 }
 
-
-
-
-function handleResult(error,result){
-  if (error){
-    console.error(error);
-    return;
-  } else {
-    console.log(result);
+function keyPressed() {
+  if (keyCode === 84) {  // "t"
+    startTraining();
   }
-}
-
-function classify(){
-  shapeClassifier.classify( {image: canvas.get(0,0,64,64)} , handleResult);
-  
-}
-
-
-function modelLoaded(){
-  console.log(">>> MODEL LOADED <<<")
 }
 
 
 function startTraining(){
-  shapeClassifier.train({ epochs: 50 }, finishedTraining);
+  shapeClassifier.train({ epochs: 20 }, finishedTraining);
 }
 
 
 function finishedTraining() {  
   console.log(">>> TRAINING FINISHED <<<")
+  shapeClassifier.save();
 }
+
 
 
