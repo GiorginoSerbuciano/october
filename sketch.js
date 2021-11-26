@@ -1,5 +1,7 @@
 let canvas;
 let colors = {'background': (22,22,29), 'drawing': (255),}
+let label; 
+let readArea = [10, 10, 512, 512];
 
 function setup(){
   canvas = createCanvas(windowWidth,windowHeight);
@@ -22,7 +24,9 @@ function area(){
   noFill();
   strokeWeight(1);
   stroke(colors.drawing);
-  square(0,0,256);
+  rect(readArea[0], readArea[1], readArea[2], readArea[3]);
+  strokeWeight(10);
+  point(10, 10);
 }
 function modelLoaded(){
   console.log(">>> MODEL LOADED <<<")
@@ -30,9 +34,10 @@ function modelLoaded(){
 
 
 function classify(){
-  let img = canvas.get(0,0,256,256);
+  let img = canvas.get(readArea[0], readArea[1], readArea[2], readArea[3]);
   img.resize(70,70);
-  let result = shapeClassifier.classify( {image: img} , handleResult)
+  let result = shapeClassifier.classify( {image: img} , handleResult);
+  clearCanvas();
 }
 
 
@@ -41,43 +46,52 @@ function handleResult(error,result){
     console.error(error);
     return;
   } else {
-    // console.log(result);
+    console.log(result);
     return tree(result);
   }
 }
 
-
 function tree(result) {
-  let l_mod = result[0].confidence;
-  let label = result[0].label;
+  let confidence = result[0].confidence;
+  let label = result[0].label;  
   let angle;
   if (label === 'lobed'){
-    angle = QUARTER_PI - random(0,0.3) * QUARTER_PI;
+    angle = QUARTER_PI - random(0.1, 0.2) * QUARTER_PI;
   } else if (label === 'entire') {
-    angle = QUARTER_PI - random(0.4, 0.7) * QUARTER_PI;
+    angle = QUARTER_PI - random(0.5, 0.6) * QUARTER_PI;
   } 
-  let len = 200 * l_mod;
+  let len = 300 * confidence;
   
-  translate(width/2, height);
-  console.log(label);
-  return branch(angle, len);
+  translate(width/1.5, height);
+  return branch(angle, len), nameTree(label);
 }
 
+let leaf;
+let mask;
 function branch(angle, len) {
+  leaf.resize(60, 60);
+  blendMode(LIGHTEST);
   strokeWeight(3);
   line(0, 0, 0, -len);
   translate(0, -len);
-  if (len > 20) {
+  if (len > 30) {
     push();
     rotate(angle);
     branch(angle, len * 0.67);
     pop();
+
     push();
     rotate(-angle);
     branch(angle, len * 0.67);
     pop();
+
+    push();
+    image(leaf, 0, 0);
+    rotate(angle * 3);
+    image(leaf, 0, 0);
+    pop();
   }
-  translate(-width/2, -height+len);
+  translate(-width/1.5, -height+len);
 }
 
 function windowResized() {
@@ -91,10 +105,7 @@ let drawing = {
   store:[],
 }
 function clearCanvas() {
-  drawing = {
-    current:[],
-    store:[],
-  }
+  leaf = canvas.get(readArea[0], readArea[1], readArea[2], readArea[3]);
   clear();
   background(colors.background);
   area();
@@ -103,7 +114,7 @@ function clearCanvas() {
 
 function drawSketches(array) { 
   beginShape();
-  strokeWeight(4); 
+  strokeWeight(10); 
   stroke(colors.drawing);
 
   for (let i = 0; i < array.length; i++) { 
@@ -116,17 +127,17 @@ function drawSketches(array) {
 
 function nameTree() {
   genus = {
-    "lobed": ["Acacia", "Ailanthus", "Bombax", "Brahea", "Castanea", "Celtis", "Dacrydium", "Dicksonia", 
+        "lobed": ["Acacia", "Ailanthus", "Bombax", "Brahea", "Castanea", "Celtis", "Dacrydium", "Dicksonia", 
     "Elaeagnus", "Euonymus", "Fagus", "Ficus", "Ginko", "Grevillea", "Harpullia", "Howea", "Ilex", "Jacaranda", 
     "Juglans", "Kalopanax", "Kigelia", "Lagerstroemia", "Licaria", "Magnolia", "Mimosa", "Nectandra", "Nyssa", 
     "Olea", "Paulownia", "Phoenix", "Raphia", "Rhododendron", "Sassafras", "Streblus", "Terminalia", 
     "Tsuga", "Ulmus", "Vachellia", "Viburnum", "Wollemia", "Yucca", "Zelkova"], 
-    "entire": ["Agathis", "Archontophoenix", "Brosimum", "Buxus", "Calocedrus", "Cinnamomum", "Dalbergia", 
+        "entire": ["Agathis", "Archontophoenix", "Brosimum", "Buxus", "Calocedrus", "Cinnamomum", "Dalbergia", 
     "Diospyros", "Elaeis", "Euphorbia", "Firmiana", "Fraxinus", "Gleditsia", "Gymnanthes", "Hibiscus", "Hymenaea", 
     "Illicium", "Inga", "Jubaea", "Juniperus", "Khaya", "Kokia", "Laburnum", "Lithocarpus", "Melia", "Morus", 
     "Nerium", "Nothofagus", "Ostrya", "Persea", "Populus", "Quercus", "Rhus", "Robinia", "Schinus", "Spondias", 
     "Taxodium", "Thespesia", "Vitex", "Xylosma", "Zanthoxylum"]
-  };
+    };
   species = ["abbreviata", "acellerata", "alnoides", "balsamea", "borealis", "brownii", "calantha", "centralis", 
     "chamaeleon", "decidua", "depressa", "difformis", "elata", "erioloba", "excelsa", "falcata", "filicifolia", 
     "fulva", "gentlei", "gilesiana", "glaucescens", "hamiltoniana", "hemignosta", "holosericea", "inaequilatera", 
@@ -137,4 +148,5 @@ function nameTree() {
     "shuttleworthii", "taylori", "tonkinensis", "translucens", "umbellata", "uncinata", "urophylla", "varia", 
     "victoriae", "villaregalis", "weberbaueri", "wetarensis", "willardiana", "xanthina", "xerophila", "xiphophylla", 
     "yirrkallensis", "yorkrakinensis", "yunnanensis", "zapatensis", "zatrichota", "zygia"];
-}
+  }
+  
