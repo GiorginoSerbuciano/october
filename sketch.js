@@ -61,7 +61,7 @@ function tree(result) {
     angle = QUARTER_PI - random(0.5, 0.6) * QUARTER_PI;
   } 
   let len = 300 * confidence;
-  
+
   translate(width/1.5, height);
   return branch(angle, len), nameTree(label);
 }
@@ -125,7 +125,7 @@ function drawSketches(array) {
   endShape(); 
 }
 
-function nameTree() {
+function nameTree(label) {
   genus = {
         "lobed": ["Acacia", "Ailanthus", "Bombax", "Brahea", "Castanea", "Celtis", "Dacrydium", "Dicksonia", 
     "Elaeagnus", "Euonymus", "Fagus", "Ficus", "Ginko", "Grevillea", "Harpullia", "Howea", "Ilex", "Jacaranda", 
@@ -148,5 +148,23 @@ function nameTree() {
     "shuttleworthii", "taylori", "tonkinensis", "translucens", "umbellata", "uncinata", "urophylla", "varia", 
     "victoriae", "villaregalis", "weberbaueri", "wetarensis", "willardiana", "xanthina", "xerophila", "xiphophylla", 
     "yirrkallensis", "yorkrakinensis", "yunnanensis", "zapatensis", "zatrichota", "zygia"];
+
+  let genusName; 
+
+  if (label === 'lobed'){
+    genusName = random(genus.lobed);
+  } 
+  else if (label === 'entire') {
+    genusName = random(genus.entire);
   }
-  
+
+  let speciesName = random(species);
+  let treeName = genusName + " " + speciesName; 
+  //console.log(treeName);
+  textFont("Times New Roman");
+  fill(255);
+  strokeWeight(2);
+  textSize(40);
+  text(treeName, 10, windowHeight - 10);
+}
+
