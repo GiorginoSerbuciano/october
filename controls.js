@@ -1,8 +1,6 @@
 function keyPressed() {
-  if (keyCode === 67) {  // "c"
-    clearCanvas();
-  } else if (keyCode === 83) {  // "s"
-    classify();
+  if (keyCode === 83) {  // "s"
+    plantTree(treeName);
   } 
 }
 

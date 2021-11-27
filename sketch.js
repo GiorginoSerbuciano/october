@@ -20,6 +20,7 @@ function setup(){
   }
   shapeClassifier.load(modelDetails, modelLoaded);
 }
+
 function area(){
   noFill();
   strokeWeight(1);
@@ -27,7 +28,35 @@ function area(){
   rect(readArea[0], readArea[1], readArea[2], readArea[3]);
   strokeWeight(10);
   point(10, 10);
+  info();
 }
+
+function info(){
+  fill(255);
+  strokeWeight(0.5);
+  textFont("Courier New");
+  textSize(15);
+  let info = "I N S T R U C T I O N S:\n" +
+             "* In a single stroke, draw a leaf starting from the upper-left corner, keeping within the bounding box.\n" + 
+             "* Releasing the mouse will generate a tree based on the kind of leaf you have drawn.\n" +
+             "* If you wish to keep a tree, press 's' on your keyboard. This will create an image of the tree for you.\n" +
+             "* You may draw new leaves as many times as you like; the previous tree will be erased.\n" 
+  text(info, readArea[0], readArea[3] + 25, 512);
+  title();
+}
+
+function title() {
+  fill(255);
+  // strokeWeight(2);
+  textFont("Helvetica");
+  textStyle(ITALIC);
+  textSize(50);
+  text("O C T O B E R.", 75, height - 150);
+  textSize(12);
+  textStyle(NORMAL);
+  text("An ml5 project using the p5.js library by KDArslan and GiorginoSerbuciano. 2021", 75, height - 125);
+}
+
 function modelLoaded(){
   console.log(">>> MODEL LOADED <<<")
 }
@@ -71,7 +100,7 @@ let mask;
 function branch(angle, len) {
   leaf.resize(60, 60);
   blendMode(LIGHTEST);
-  strokeWeight(3);
+  strokeWeight(2);
   line(0, 0, 0, -len);
   translate(0, -len);
   if (len > 30) {
@@ -125,6 +154,7 @@ function drawSketches(array) {
   endShape(); 
 }
 
+let treeName;
 function nameTree(label) {
   genus = {
         "lobed": ["Acacia", "Ailanthus", "Bombax", "Brahea", "Castanea", "Celtis", "Dacrydium", "Dicksonia", 
@@ -159,12 +189,16 @@ function nameTree(label) {
   }
 
   let speciesName = random(species);
-  let treeName = genusName + " " + speciesName; 
+  treeName = genusName + " " + speciesName; 
   //console.log(treeName);
   textFont("Times New Roman");
   fill(255);
   strokeWeight(2);
   textSize(40);
-  text(treeName, 10, windowHeight - 10);
+  text(treeName, width / 1.5 + 100, height - 50);
 }
 
+function plantTree(name){
+  let img = canvas.get(width/2.5, 0, width/1.9, height);
+  img.save(name);
+}
