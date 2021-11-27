@@ -8,7 +8,9 @@ function keyPressed() {
 
 
 function mousePressed() {
+  clearCanvas();
   drawing.current = []; 
+  
 }
 
 
@@ -22,5 +24,5 @@ function mouseDragged() {
 
 function mouseReleased() {
   drawing.store.push(drawing.current);
+  classify();
 }
-

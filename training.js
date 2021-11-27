@@ -8,9 +8,11 @@ let index;
 function preload(){
   for (counter = 0; counter < size; counter++){
     index = nf(counter + 1, 3, 0);
-    leaves.lobed.push(loadImage(`data/lobed_${index}.png`));
-    index = nf(counter + 201, 3, 0);
-    leaves.entire.push(loadImage(`data/entire_${index}.png`));
+    leaves.lobed.push(loadImage(`dataset/data/lobed_${index}.png`));
+    // console.log(`data/lobed_${index}.png`);
+    index = nf(counter + size + 1, 3, 0);
+    leaves.entire.push(loadImage(`dataset/data/entire_${index}.png`));
+    // console.log(`data/entire_${index}.png`);
   }
 }
 
@@ -24,8 +26,8 @@ function setup(){
   shapeClassifier = ml5.neuralNetwork(options);
   for (label in leaves){
     for (item in leaves[label]){
-    let image = leaves[label][item];
-    shapeClassifier.addData( {image: image}, {label: label} );
+      let image = leaves[label][item];
+      shapeClassifier.addData( {image: image}, {label: label} );
     }
   }
   shapeClassifier.normalizeData(); 
@@ -39,7 +41,7 @@ function keyPressed() {
 
 
 function startTraining(){
-  shapeClassifier.train({ epochs: 20 }, finishedTraining);
+  shapeClassifier.train({ epochs: 50 }, finishedTraining);
 }
 
 
