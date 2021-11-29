@@ -51,10 +51,10 @@ function title() {
   textFont("Helvetica");
   textStyle(ITALIC);
   textSize(50);
-  text("O C T O B E R.", 75, height - 150);
+  text("O C T O B E R.", 530, height - 50);
   textSize(12);
   textStyle(NORMAL);
-  text("An ml5 project using the p5.js library by KDArslan and GiorginoSerbuciano. 2021", 75, height - 125);
+  text("An ml5 project using the p5.js library by KDArslan and GiorginoSerbuciano. 2021", 535, height - 25);
 }
 
 function modelLoaded(){
