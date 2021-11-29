@@ -6,7 +6,7 @@ let readArea = [10, 10, 512, 512];
 function setup(){
   canvas = createCanvas(windowWidth,windowHeight);
   background(colors.background);
-  area();
+  overlay();
   let options = {
     inputs: [70, 70, 4],
     task: "imageClassification",
@@ -21,7 +21,7 @@ function setup(){
   shapeClassifier.load(modelDetails, modelLoaded);
 }
 
-function area(){
+function overlay(){
   noFill();
   strokeWeight(1);
   stroke(colors.drawing);
@@ -96,9 +96,8 @@ function tree(result) {
 }
 
 let leaf;
-let mask;
 function branch(angle, len) {
-  leaf.resize(60, 60);
+  leaf.resize(70, 70);
   blendMode(LIGHTEST);
   strokeWeight(2);
   line(0, 0, 0, -len);
@@ -137,7 +136,7 @@ function clearCanvas() {
   leaf = canvas.get(readArea[0], readArea[1], readArea[2], readArea[3]);
   clear();
   background(colors.background);
-  area();
+  overlay();
 }
 
 
@@ -190,7 +189,6 @@ function nameTree(label) {
 
   let speciesName = random(species);
   treeName = genusName + " " + speciesName; 
-  //console.log(treeName);
   textFont("Times New Roman");
   fill(255);
   strokeWeight(2);
